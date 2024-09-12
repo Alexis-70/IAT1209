@@ -14,13 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const stimulusDiv = document.getElementById('stimulus');
     const errorMessage = document.getElementById('error-message');
     const iatContainer = document.getElementById('iat-container');
-    const pauseMessage = document.getElementById('pause-message');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
-        pauseMessage.classList.add('hidden');
         iatContainer.classList.remove('hidden');
         showNextStimulus();
     }
@@ -86,9 +84,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentBlock > 5) {
             endTest();
         } else {
-            pauseMessage.classList.remove('hidden');
-            iatContainer.classList.add('hidden');
+            showBlockInfo();
         }
+    }
+
+    function showBlockInfo() {
+        iatContainer.classList.add('hidden');
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+        alert(blockMessage);
+        iatContainer.classList.remove('hidden');
+        showNextStimulus();
     }
 
     function endTest() {
@@ -99,4 +104,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.addEventListener('keydown', function (event) {
-        if (event.code === 'Space' &&
+        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
+            startIAT();
+        } else if (event.code === 'ArrowLeft') {
+            const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('nome')) ||
+                                    (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliEmotion.includes(stimulusDiv.innerText));
+            recordResponse(correctResponse);
+        } else if (event.code === 'ArrowRight') {
+            const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText.includes('altro')) ||
+                                    (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliEmotion.includes(stimulusDiv.innerText));
+            recordResponse(correctResponse);
+        }
+    });
+});
