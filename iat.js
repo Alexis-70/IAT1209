@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const categoriesTarget = ['Io', 'Non Io'];
     const categoriesAttribute = ['Vergogna', 'Ansia'];
     const stimuliSelf = ['Il tuo nome', 'Il nome di un altro'];
-    const stimuliEmotion = ['Imbarazzo', 'Timidezza', 'Ansia', 'Paura'];
+    const stimuliShame = ['Imbarazzo', 'Timidezza'];
+    const stimuliAnxiety = ['Ansia', 'Paura'];
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
@@ -35,17 +36,23 @@ document.addEventListener('DOMContentLoaded', function () {
         if (block === 1 || block === 4) {
             return stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)];
         } else if (block === 2) {
-            return stimuliEmotion[Math.floor(Math.random() * stimuliEmotion.length)];
+            return Math.random() > 0.5 
+                ? stimuliShame[Math.floor(Math.random() * stimuliShame.length)] 
+                : stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)];
+        } else if (block === 3) {
+            return Math.random() > 0.5 
+                ? stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)] 
+                : stimuliShame[Math.floor(Math.random() * stimuliShame.length)];
         } else {
             return Math.random() > 0.5 
                 ? stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)] 
-                : stimuliEmotion[Math.floor(Math.random() * stimuliEmotion.length)];
+                : stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)];
         }
     }
 
     function getCategoryLeftForBlock(block) {
         if (block === 1 || block === 3) {
-            return 'Io';
+            return block === 3 ? 'Io + Vergogna' : 'Io';
         } else if (block === 2 || block === 5) {
             return 'Vergogna';
         } else {
@@ -55,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getCategoryRightForBlock(block) {
         if (block === 1 || block === 3) {
-            return 'Non Io';
+            return block === 3 ? 'Non Io + Ansia' : 'Non Io';
         } else if (block === 2 || block === 5) {
             return 'Ansia';
         } else {
@@ -109,12 +116,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft') {
-            const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('tuo nome')) ||
-                                    (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliEmotion.includes(stimulusDiv.innerText));
+            const correctResponse = (currentBlock === 3 && stimulusDiv.innerText.includes('nome')) ||
+                                    (currentBlock === 3 && stimuliShame.includes(stimulusDiv.innerText)) ||
+                                    (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('tuo nome')) ||
+                                    (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText));
             recordResponse(correctResponse);
         } else if (event.code === 'ArrowRight') {
-            const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText.includes('altro')) ||
-                                    (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliEmotion.includes(stimulusDiv.innerText));
+            const correctResponse = (currentBlock === 3 && stimulusDiv.innerText.includes('altro')) ||
+                                    (currentBlock === 3 && stimuliAnxiety.includes(stimulusDiv.innerText)) ||
+                                    (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText.includes('altro')) ||
+                                    (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
             recordResponse(correctResponse);
         }
     });
