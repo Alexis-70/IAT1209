@@ -123,41 +123,33 @@ document.addEventListener('DOMContentLoaded', function () {
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
+    function isCorrectResponse(category, stimulus) {
+        switch (category) {
+            case 'Io':
+                return stimulus === 'Il tuo nome';
+            case 'Non Io':
+                return stimulus === 'Il nome di un altro';
+            case 'Vergogna':
+                return stimuliShame.includes(stimulus);
+            case 'Ansia':
+                return stimuliAnxiety.includes(stimulus);
+            case 'Io e Vergogna':
+                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
+            case 'Non Io e Ansia':
+                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
+            default:
+                return false;
+        }
+    }
+
     document.addEventListener('keydown', function (event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
-        } else if (event.code === 'ArrowLeft') {
-            const leftCategory = getCategoryLeftForBlock(currentBlock);
+        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+            const isLeft = event.code === 'ArrowLeft';
+            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
             const stimulusText = stimulusDiv.innerText;
-            const isSelf = stimulusText === 'Il tuo nome';
-            const isOther = stimulusText === 'Il nome di un altro';
-            const isShame = stimuliShame.includes(stimulusText);
-            const isAnxiety = stimuliAnxiety.includes(stimulusText);
-
-            let isCorrect = false;
-            if (leftCategory === 'Io') {
-                isCorrect = isSelf;
-            } else if (leftCategory === 'Vergogna') {
-                isCorrect = isShame;
-            } else if (leftCategory === 'Io e Vergogna') {
-                isCorrect = isSelf || isShame;
-            }
-
-            recordResponse(isCorrect);
-        } else if (event.code === 'ArrowRight') {
-            const rightCategory = getCategoryRightForBlock(currentBlock);
-            const stimulusText = stimulusDiv.innerText;
-            const isOther = stimulusText === 'Il nome di un altro';
-            const isAnxiety = stimuliAnxiety.includes(stimulusText);
-
-            let isCorrect = false;
-            if (rightCategory === 'Non Io') {
-                isCorrect = isOther;
-            } else if (rightCategory === 'Ansia') {
-                isCorrect = isAnxiety;
-            } else if (rightCategory === 'Non Io e Ansia') {
-                isCorrect = isOther || isAnxiety;
-            }
+            const isCorrect = isCorrectResponse(category, stimulusText);
 
             recordResponse(isCorrect);
         }
