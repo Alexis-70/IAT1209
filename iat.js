@@ -19,9 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
 
+    function isMobileDevice() {
+        return /Mobi|Android/i.test(navigator.userAgent);
+    }
+
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
+        if (isMobileDevice()) {
+            document.getElementById('touch-buttons').classList.remove('hidden');
+        }
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -34,42 +41,42 @@ document.addEventListener('DOMContentLoaded', function () {
             case 1:
             case 4:
                 // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0])
-                ];
+                for (let i = 0; i < 10; i++) {
+                    stimulusList.push(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
+                    stimulusList.push(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
+                }
                 break;
             case 2:
                 // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
-                stimulusList = [
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                for (let i = 0; i < 10; i++) {
+                    stimulusList.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
+                    stimulusList.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
+                }
                 break;
             case 3:
                 // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                for (let i = 0; i < 10; i++) {
+                    stimulusList.push(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
+                    stimulusList.push(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
+                    stimulusList.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
+                    stimulusList.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
+                }
                 break;
             case 4:
                 // Blocco 4: "Io" a destra e "Non Io" a sinistra
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0])
-                ];
+                for (let i = 0; i < 10; i++) {
+                    stimulusList.push(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
+                    stimulusList.push(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
+                }
                 break;
             case 5:
                 // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
-                stimulusList = [
-                    ...Array(10).fill(stimuliOther[0]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                for (let i = 0; i < 10; i++) {
+                    stimulusList.push(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
+                    stimulusList.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
+                    stimulusList.push(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
+                    stimulusList.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
+                }
                 break;
         }
         shuffleArray(stimulusList);
@@ -134,12 +141,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function isCorrectResponse(category, stimulusText) {
+        // Implement your logic to determine if the response is correct
+        // This is a placeholder function
+        return true; // Adjust logic based on your criteria
+    }
+
     function recordResponse(isCorrect) {
+        endTime = new Date().getTime();
+        const reactionTime = endTime - startTime;
+        reactionTimes.push(reactionTime);
         if (isCorrect) {
-            errorMessage.classList.add('hidden');
-            endTime = new Date().getTime();
-            const reactionTime = endTime - startTime;
-            reactionTimes.push(reactionTime);
             showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
@@ -147,64 +159,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function nextBlock() {
-        currentBlock++;
-        if (currentBlock > 5) {
-            endTest();
-        } else {
-            showBlockInfo();
-        }
-    }
-
-    function showBlockInfo() {
-        iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
-        alert(blockMessage);
-        iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
-        showNextStimulus();
-    }
-
-    function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
+        reactionTimesDisplay.innerText = `Tempi di reazione: ${reactionTimes.join(', ')}`;
+        // Here you would calculate the D-score and other statistics
     }
 
-    function isCorrectResponse(category, stimulus) {
-        switch (category) {
-            case 'Io':
-                return stimulus === 'Il tuo nome';
-            case 'Non Io':
-                return stimulus === 'Il nome di un altro';
-            case 'Vergogna':
-                return stimuliShame.includes(stimulus);
-            case 'Ansia':
-                return stimuliAnxiety.includes(stimulus);
-            case 'Io e Vergogna':
-                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
-            case 'Non Io e Ansia':
-                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
-            case 'Non Io e Vergogna':
-                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
-            case 'Io e Ansia':
-                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
-            default:
-                return false;
-        }
-    }
-
-    document.addEventListener('keydown', function (event) {
-        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
+    function handleKeyPress(event) {
+        if (event.key === ' ') {
             startIAT();
-        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
-            const isLeft = event.code === 'ArrowLeft';
-            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
+        } else if (event.key === 'ArrowLeft') {
+            const category = getCategoryLeftForBlock(currentBlock);
             const stimulusText = stimulusDiv.innerText;
             const isCorrect = isCorrectResponse(category, stimulusText);
-
+            recordResponse(isCorrect);
+        } else if (event.key === 'ArrowRight') {
+            const category = getCategoryRightForBlock(currentBlock);
+            const stimulusText = stimulusDiv.innerText;
+            const isCorrect = isCorrectResponse(category, stimulusText);
             recordResponse(isCorrect);
         }
+    }
+
+    function handleTouchResponse(isLeft) {
+        const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
+        const stimulusText = stimulusDiv.innerText;
+        const isCorrect = isCorrectResponse(category, stimulusText);
+        recordResponse(isCorrect);
+    }
+
+    document.addEventListener('keydown', handleKeyPress);
+    document.getElementById('left-button').addEventListener('click', function () {
+        handleTouchResponse(true);
+    });
+    document.getElementById('right-button').addEventListener('click', function () {
+        handleTouchResponse(false);
     });
 });
