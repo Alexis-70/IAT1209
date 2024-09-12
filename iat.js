@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimoli associati a "Io"
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimoli associati a "Non Io"
     const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
     const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
 
@@ -38,33 +38,40 @@ document.addEventListener('DOMContentLoaded', function () {
             case 4:
                 // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
                 ];
                 break;
             case 2:
                 // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
                 // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 4:
+                // Blocco 4: "Io" a destra e "Non Io" a sinistra
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
                 ];
                 break;
             case 5:
                 // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
         }
@@ -191,44 +198,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Event listener per il pulsante di avvio
+    // Event listener for start button
     startButton.addEventListener('click', function () {
         startIAT();
         startButton.classList.add('hidden');
-        document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
+        document.getElementById('touch-buttons').classList.remove('hidden');
     });
 
-    // Event listeners per i pulsanti touch
+    // Event listeners for touch buttons
     leftButton.addEventListener('click', function () {
-        if (stimulusDiv.innerText) {
-            const isCorrect = isCorrectResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
-            recordResponse(isCorrect);
-        }
+        const stimulus = stimulusDiv.innerText;
+        const categoryLeft = getCategoryLeftForBlock(currentBlock);
+        recordResponse(isCorrectResponse(categoryLeft, stimulus));
     });
 
-    rightButton.addEventListener('click', function () {
-        if (stimulusDiv.innerText) {
-            const isCorrect = isCorrectResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
-            recordResponse(isCorrect);
-        }
+       rightButton.addEventListener('click', function () {
+        const stimulus = stimulusDiv.innerText;
+        const categoryRight = getCategoryRightForBlock(currentBlock);
+        recordResponse(isCorrectResponse(categoryRight, stimulus));
     });
 
-    // Event listener per gli eventi della tastiera (per desktop)
+    // For desktop compatibility, use arrow keys for responses
     document.addEventListener('keydown', function (event) {
-        if (event.code === 'ArrowLeft') {
-            if (stimulusDiv.innerText) {
-                const isCorrect = isCorrectResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
-                recordResponse(isCorrect);
-            }
-        } else if (event.code === 'ArrowRight') {
-            if (stimulusDiv.innerText) {
-                const isCorrect = isCorrectResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
-                recordResponse(isCorrect);
-            }
-        } else if (event.code === 'Space') {
-            if (startButton.classList.contains('hidden')) {
-                startIAT();
-            }
+        const stimulus = stimulusDiv.innerText;
+        if (event.key === 'ArrowLeft') {
+            const categoryLeft = getCategoryLeftForBlock(currentBlock);
+            recordResponse(isCorrectResponse(categoryLeft, stimulus));
+        } else if (event.key === 'ArrowRight') {
+            const categoryRight = getCategoryRightForBlock(currentBlock);
+            recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
     });
+
 });
