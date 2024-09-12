@@ -162,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
         currentStimulusIndex = 0; // Reset the index for the new block
-        blockStimuliCount = 0; // Reset block stimuli count for the new block
         showNextStimulus();
     }
 
