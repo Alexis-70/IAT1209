@@ -18,13 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
-    const startButton = document.getElementById('start-button');
     const touchButtons = document.getElementById('touch-buttons');
+    const startButton = document.getElementById('start-button');
+    const startButtonContainer = document.getElementById('start-button-container');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
+        startButtonContainer.classList.add('hidden'); // Hide the start button
         iatContainer.classList.remove('hidden');
-        touchButtons.classList.add('hidden'); // Hide touch buttons when starting
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -160,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati!`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -178,54 +179,66 @@ document.addEventListener('DOMContentLoaded', function () {
     function isCorrectResponse(category, stimulus) {
         switch (category) {
             case 'Io':
-                return stimulus === 'Il tuo nome';
+                return stimuliSelf.includes(stimulus);
             case 'Non Io':
-                return stimulus === 'Il nome di un altro';
+                return stimuliOther.includes(stimulus);
             case 'Vergogna':
                 return stimuliShame.includes(stimulus);
             case 'Ansia':
                 return stimuliAnxiety.includes(stimulus);
             case 'Io e Vergogna':
-                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
+                return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Non Io e Ansia':
-                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
+                return stimuliOther.includes(stimulus) || stimuliAnxiety.includes(stimulus);
             case 'Non Io e Vergogna':
-                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
+                return stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Io e Ansia':
-                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
+                return stimuliSelf.includes(stimulus) || stimuliAnxiety.includes(stimulus);
             default:
                 return false;
         }
     }
 
-    function showStartButton() {
-        if (window.innerWidth <= 768) { // Show start button only on mobile
-            startButton.classList.remove('hidden');
-            touchButtons.classList.remove('hidden'); // Show touch buttons
-        } else {
-            startButton.classList.add('hidden');
-        }
-    }
-
-    document.getElementById('start-button').addEventListener('click', function () {
-        startIAT();
-    });
-
+    // Event listener per i pulsanti touch su mobile
     document.getElementById('left-button').addEventListener('click', function () {
-        handleTouchResponse(true);
+        handleResponse(true); // Assume correct response for left button
     });
 
     document.getElementById('right-button').addEventListener('click', function () {
-        handleTouchResponse(false);
+        handleResponse(false); // Assume correct response for right button
     });
 
-    function handleTouchResponse(isLeft) {
+    function handleResponse(isLeft) {
         const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
         const stimulusText = stimulusDiv.innerText;
         const isCorrect = isCorrectResponse(category, stimulusText);
         recordResponse(isCorrect);
     }
 
-    // Initialize
-    showStartButton();
+    // Event listener per la barra spaziatrice su desktop
+    document.addEventListener('keydown', function (event) {
+        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
+            startIAT();
+        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+            const isLeft = event.code === 'ArrowLeft';
+            handleResponse(isLeft);
+        }
+    });
+
+    // Mostra il pulsante di inizio su mobile
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        startButtonContainer.classList.remove('hidden');
+    } else {
+        // Se non è mobile, la barra spaziatrice è utilizzata per iniziare il test
+        document.addEventListener('keydown', function (event) {
+            if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
+                startIAT();
+            }
+        });
+    }
+
+    // Mostra il pulsante di inizio quando si carica la pagina
+    startButton.addEventListener('click', function () {
+        startIAT();
+    });
 });
