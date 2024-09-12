@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (block === 2) {
             return stimuliEmotion[Math.floor(Math.random() * stimuliEmotion.length)];
         } else {
-            return Math.random() > 0.5 ? stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)] : stimuliEmotion[Math.floor(Math.random() * stimuliEmotion.length)];
+            return Math.random() > 0.5 
+                ? stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)] 
+                : stimuliEmotion[Math.floor(Math.random() * stimuliEmotion.length)];
         }
     }
 
@@ -107,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft') {
-            const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('nome')) ||
+            const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('tuo nome')) ||
                                     (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliEmotion.includes(stimulusDiv.innerText));
             recordResponse(correctResponse);
         } else if (event.code === 'ArrowRight') {
