@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
+    const startButton = document.getElementById('start-button');
+    const leftZone = document.querySelector('.left-zone');
+    const rightZone = document.querySelector('.right-zone');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
@@ -33,21 +36,18 @@ document.addEventListener('DOMContentLoaded', function () {
         switch (block) {
             case 1:
             case 4:
-                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0])
                 ];
                 break;
             case 2:
-                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
-                // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0]),
@@ -56,14 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 4:
-                // Blocco 4: "Io" a destra e "Non Io" a sinistra
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0])
                 ];
                 break;
             case 5:
-                // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
                     ...Array(10).fill(stimuliOther[0]),
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
@@ -157,54 +155,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi il pulsante Start per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
         showNextStimulus();
     }
 
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
+        const avgReactionTime = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
-    function isCorrectResponse(category, stimulus) {
-        switch (category) {
-            case 'Io':
-                return stimulus === 'Il tuo nome';
-            case 'Non Io':
-                return stimulus === 'Il nome di un altro';
-            case 'Vergogna':
-                return stimuliShame.includes(stimulus);
-            case 'Ansia':
-                return stimuliAnxiety.includes(stimulus);
-            case 'Io e Vergogna':
-                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
-            case 'Non Io e Ansia':
-                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
-            case 'Non Io e Vergogna':
-                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
-            case 'Io e Ansia':
-                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
-            default:
-                return false;
-        }
-    }
+    startButton.addEventListener('click', function () {
+        startIAT();
+    });
 
-    document.addEventListener('keydown', function (event) {
-        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
-            startIAT();
-        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
-            const isLeft = event.code === 'ArrowLeft';
-            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
-            const stimulusText = stimulusDiv.innerText;
-            const isCorrect = isCorrectResponse(category, stimulusText);
+    leftZone.addEventListener('click', function () {
+        const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
+                                (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
+                                (getCategoryLeftForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
+                                (getCategoryLeftForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
+        recordResponse(correctResponse);
+    });
 
-            recordResponse(isCorrect);
-        }
+    rightZone.addEventListener('click', function () {
+        const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
+                                (getCategoryRightForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
+                                (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
+                                (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
+        recordResponse(correctResponse);
     });
 });
