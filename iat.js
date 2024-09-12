@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi il pulsante Start per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
+        generateStimuliForBlock(currentBlock); // Regenerate stimuli for the next block
         showNextStimulus();
     }
 
@@ -169,23 +170,38 @@ document.addEventListener('DOMContentLoaded', function () {
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
+    function checkResponse(category, stimulus) {
+        const isSelf = stimulus === stimuliSelf[0];
+        const isOther = stimulus === stimuliOther[0];
+        const isShame = stimuliShame.includes(stimulus);
+        const isAnxiety = stimuliAnxiety.includes(stimulus);
+
+        if (category === 'Io') {
+            return isSelf;
+        }
+        if (category === 'Non Io') {
+            return isOther;
+        }
+        if (category === 'Vergogna') {
+            return isShame;
+        }
+        if (category === 'Ansia') {
+            return isAnxiety;
+        }
+        return false;
+    }
+
     startButton.addEventListener('click', function () {
         startIAT();
     });
 
     leftZone.addEventListener('click', function () {
-        const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
+        const correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
         recordResponse(correctResponse);
     });
 
     rightZone.addEventListener('click', function () {
-        const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
+        const correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
         recordResponse(correctResponse);
     });
 });
