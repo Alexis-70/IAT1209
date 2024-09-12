@@ -1,18 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const categoriesTarget = ['Io', 'Non Io'];
-    const categoriesAttribute = ['Vergogna', 'Ansia'];
-    const stimuliSelf = ['Il tuo nome'];
-    const stimuliOther = ['Il nome di un altro'];
-    const stimuliShame = ['Imbarazzo', 'Timidezza'];
-    const stimuliAnxiety = ['Ansia', 'Paura'];
+    const stimuliSelf = ['Il tuo nome']; // Stimolo associato a "Io"
+    const stimuliOther = ['Il nome di un altro']; // Stimolo associato a "Non Io"
+    const stimuliShame = ['Imbarazzo', 'Timidezza']; // Stimoli associati a "Vergogna"
+    const stimuliAnxiety = ['Ansia', 'Paura']; // Stimoli associati a "Ansia"
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
     const reactionTimes = [];
-    let stimuliForCurrentBlock = [];
+    let stimulusList = [];
+    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
 
-    const startButton = document.getElementById('start-button');
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
     const stimulusDiv = document.getElementById('stimulus');
@@ -20,8 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
-    const leftZone = document.getElementById('left-zone');
-    const rightZone = document.getElementById('right-zone');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
@@ -30,65 +26,92 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-    function showNextStimulus() {
-        errorMessage.classList.add('hidden');
-        if (currentStimulusIndex >= stimuliForCurrentBlock.length) {
-            nextBlock();
-            return;
+    function generateStimuliForBlock(block) {
+        stimulusList = [];
+        blockStimuliCount = 0; // Reset stimuli count for the new block
+
+        switch (block) {
+            case 1:
+            case 4:
+                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0])
+                ];
+                break;
+            case 2:
+                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
+                stimulusList = [
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 3:
+                // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0]),
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 4:
+                // Blocco 4: "Io" a destra e "Non Io" a sinistra
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0])
+                ];
+                break;
+            case 5:
+                // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
+                stimulusList = [
+                    ...Array(10).fill(stimuliOther[0]),
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
         }
-        stimulusDiv.innerText = stimuliForCurrentBlock[currentStimulusIndex];
-        categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
-        categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-        startTime = new Date().getTime();
+        shuffleArray(stimulusList);
     }
 
-    function generateStimuliForBlock(block) {
-        let stimuliForBlock = [];
-        if (block === 1) {
-            for (let i = 0; i < 10; i++) {
-                stimuliForBlock.push(stimuliSelf[0]);
-                stimuliForBlock.push(stimuliOther[0]);
-            }
-        } else if (block === 2) {
-            for (let i = 0; i < 10; i++) {
-                stimuliForBlock.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
-                stimuliForBlock.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
-            }
-        } else if (block === 3) {
-            for (let i = 0; i < 10; i++) {
-                stimuliForBlock.push(stimuliSelf[0]);
-                stimuliForBlock.push(stimuliOther[0]);
-                stimuliForBlock.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
-                stimuliForBlock.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
-            }
-        } else if (block === 4) {
-            for (let i = 0; i < 10; i++) {
-                stimuliForBlock.push(stimuliSelf[0]);
-                stimuliForBlock.push(stimuliOther[0]);
-            }
-        } else if (block === 5) {
-            for (let i = 0; i < 10; i++) {
-                stimuliForBlock.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
-                stimuliForBlock.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
-                stimuliForBlock.push(stimuliSelf[0]);
-                stimuliForBlock.push(stimuliOther[0]);
-            }
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
-        stimuliForBlock = shuffle(stimuliForBlock);
-        stimuliForCurrentBlock = stimuliForBlock;
+    }
+
+    function showNextStimulus() {
+        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+            if (currentStimulusIndex < stimulusList.length) {
+                errorMessage.classList.add('hidden');
+                stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+                categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
+                categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
+                startTime = new Date().getTime();
+                blockStimuliCount++;
+                currentStimulusIndex++;
+            } else {
+                nextBlock();
+            }
+        } else {
+            nextBlock();
+        }
     }
 
     function getCategoryLeftForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
-                return 'Non Io';
+                return 'Io';
             case 2:
                 return 'Vergogna';
             case 3:
                 return 'Io e Vergogna';
+            case 4:
+                return 'Non Io'; // Blocco 4
             case 5:
-                return 'Non Io e Vergogna';
+                return 'Non Io e Vergogna'; // Blocco 5
             default:
                 return '';
         }
@@ -97,27 +120,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryRightForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
-                return 'Io';
+                return 'Non Io';
             case 2:
                 return 'Ansia';
             case 3:
-                return 'Ansia e Io';
+                return 'Non Io e Ansia';
+            case 4:
+                return 'Io'; // Blocco 4
             case 5:
-                return 'Ansia e Io';
+                return 'Io e Ansia'; // Blocco 5
             default:
                 return '';
         }
-    }
-
-    function shuffle(array) {
-        let currentIndex = array.length, randomIndex;
-        while (currentIndex !== 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-        }
-        return array;
     }
 
     function recordResponse(isCorrect) {
@@ -126,12 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
             reactionTimes.push(reactionTime);
-            currentStimulusIndex++;
-            if (currentStimulusIndex < stimuliForCurrentBlock.length) {
-                showNextStimulus();
-            } else {
-                nextBlock();
-            }
+            showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
         }
@@ -148,10 +157,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi il pulsante Start per continuare.`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
+        currentStimulusIndex = 0; // Reset the index for the new block
         showNextStimulus();
     }
 
@@ -162,56 +172,39 @@ document.addEventListener('DOMContentLoaded', function () {
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
-    function checkResponse(category, stimulus) {
-        const isSelf = stimulus === stimuliSelf[0];
-        const isOther = stimulus === stimuliOther[0];
-        const isShame = stimuliShame.includes(stimulus);
-        const isAnxiety = stimuliAnxiety.includes(stimulus);
-
-        if (category === 'Io') {
-            return isSelf;
+    function isCorrectResponse(category, stimulus) {
+        switch (category) {
+            case 'Io':
+                return stimulus === 'Il tuo nome';
+            case 'Non Io':
+                return stimulus === 'Il nome di un altro';
+            case 'Vergogna':
+                return stimuliShame.includes(stimulus);
+            case 'Ansia':
+                return stimuliAnxiety.includes(stimulus);
+            case 'Io e Vergogna':
+                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
+            case 'Non Io e Ansia':
+                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
+            case 'Non Io e Vergogna':
+                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
+            case 'Io e Ansia':
+                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
+            default:
+                return false;
         }
-        if (category === 'Non Io') {
-            return isOther;
-        }
-        if (category === 'Vergogna') {
-            return isShame;
-        }
-        if (category === 'Ansia') {
-            return isAnxiety;
-        }
-        return false;
     }
-
-    function handleResponse(event) {
-        const target = event.target.id;
-        let correctResponse = false;
-
-        if (target === 'left-zone') {
-            correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
-        } else if (target === 'right-zone') {
-            correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
-        }
-
-        recordResponse(correctResponse);
-    }
-
-    startButton.addEventListener('click', function () {
-        startIAT();
-    });
-
-    leftZone.addEventListener('click', handleResponse);
-    rightZone.addEventListener('click', handleResponse);
 
     document.addEventListener('keydown', function (event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
-        } else if (event.code === 'ArrowLeft') {
-            const correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
-            recordResponse(correctResponse);
-        } else if (event.code === 'ArrowRight') {
-            const correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
-            recordResponse(correctResponse);
+        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+            const isLeft = event.code === 'ArrowLeft';
+            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
+            const stimulusText = stimulusDiv.innerText;
+            const isCorrect = isCorrectResponse(category, stimulusText);
+
+            recordResponse(isCorrect);
         }
     });
 });
