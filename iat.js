@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-   let stimuliIo = ["Il mio nome", "Io", "Me stesso"];
-let stimuliNonIo = ["Nome di un altro", "Lui", "Lei"];
-let stimuliVergogna = ["Vergogna", "Umiliazione"];
-let stimuliAnsia = ["Ansia", "Preoccupazione"];
+    const stimuliSelf = ['Il tuo nome', 'Il nome di un altro'];
+    const stimuliShame = ['Imbarazzo', 'Timidezza'];
+    const stimuliAnxiety = ['Ansia', 'Paura'];
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
