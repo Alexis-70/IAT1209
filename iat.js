@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentBlock = 1;
     let startTime, endTime;
     const reactionTimes = [];
+    let stimuliForCurrentBlock = [];
 
     const startButton = document.getElementById('start-button');
     const categoryLeftDiv = document.getElementById('category-left');
@@ -80,12 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryLeftForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
                 return 'Non Io';
             case 2:
                 return 'Vergogna';
             case 3:
-                return 'Io e Vergogna'; 
+                return 'Io e Vergogna';
+            case 4:
+                return 'Non Io';
             case 5:
                 return 'Non Io e Vergogna';
             default:
@@ -96,12 +98,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryRightForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
                 return 'Io';
             case 2:
                 return 'Ansia';
             case 3:
                 return 'Ansia e Io';
+            case 4:
+                return 'Io';
             case 5:
                 return 'Ansia e Io';
             default:
@@ -182,17 +185,36 @@ document.addEventListener('DOMContentLoaded', function () {
         return false;
     }
 
+    function handleResponse(event) {
+        const target = event.target.id;
+        let correctResponse = false;
+
+        if (target === 'left-zone') {
+            correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
+        } else if (target === 'right-zone') {
+            correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
+        }
+
+        recordResponse(correctResponse);
+    }
+
     startButton.addEventListener('click', function () {
         startIAT();
     });
 
-    leftZone.addEventListener('click', function () {
-        const correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
-        recordResponse(correctResponse);
-    });
+    leftZone.addEventListener('click', handleResponse);
+    rightZone.addEventListener('click', handleResponse);
 
-    rightZone.addEventListener('click', function () {
-        const correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
-        recordResponse(correctResponse);
+    // For keyboard interaction on desktop
+    document.addEventListener('keydown', function (event) {
+        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
+            startIAT();
+        } else if (event.code === 'ArrowLeft') {
+            const correctResponse = checkResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
+            recordResponse(correctResponse);
+        } else if (event.code === 'ArrowRight') {
+            const correctResponse = checkResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
+            recordResponse(correctResponse);
+        }
     });
 });
