@@ -81,13 +81,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryLeftForBlock(block) {
         switch (block) {
             case 1:
+            case 4:
                 return 'Non Io';
             case 2:
                 return 'Vergogna';
             case 3:
                 return 'Io e Vergogna';
-            case 4:
-                return 'Non Io';
             case 5:
                 return 'Non Io e Vergogna';
             default:
@@ -98,13 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryRightForBlock(block) {
         switch (block) {
             case 1:
+            case 4:
                 return 'Io';
             case 2:
                 return 'Ansia';
             case 3:
                 return 'Ansia e Io';
-            case 4:
-                return 'Io';
             case 5:
                 return 'Ansia e Io';
             default:
@@ -205,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
     leftZone.addEventListener('click', handleResponse);
     rightZone.addEventListener('click', handleResponse);
 
-    // For keyboard interaction on desktop
     document.addEventListener('keydown', function (event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
