@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const categoriesTarget = ['Io', 'Non Io'];
-    const categoriesAttribute = ['Vergogna', 'Ansia'];
     const stimuliSelf = ['Il tuo nome', 'Il nome di un altro'];
     const stimuliShame = ['Imbarazzo', 'Timidezza'];
     const stimuliAnxiety = ['Ansia', 'Paura'];
@@ -35,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function getStimulusForBlock(block) {
         if (block === 1 || block === 4) {
             return stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)];
-        } else if (block === 2) {
+        } else if (block === 2 || block === 5) {
             return Math.random() > 0.5 
                 ? stimuliShame[Math.floor(Math.random() * stimuliShame.length)] 
                 : stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)];
@@ -56,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (block === 2 || block === 5) {
             return 'Vergogna';
         } else if (block === 3) {
-            return 'Io + Vergogna';
+            return 'Io e Vergogna';
         } else {
             return 'Non Io';
         }
@@ -68,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (block === 2 || block === 5) {
             return 'Ansia';
         } else if (block === 3) {
-            return 'Non Io + Ansia';
+            return 'Non Io e Ansia';
         } else {
             return 'Io';
         }
@@ -125,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isShame = stimuliShame.includes(stimulusDiv.innerText);
             const isCorrect = (leftCategory === 'Io' && isSelf) ||
                               (leftCategory === 'Vergogna' && isShame) ||
-                              (leftCategory === 'Io + Vergogna' && (isSelf || isShame));
+                              (leftCategory === 'Io e Vergogna' && (isSelf || isShame));
             recordResponse(isCorrect);
         } else if (event.code === 'ArrowRight') {
             const rightCategory = getCategoryRightForBlock(currentBlock);
@@ -133,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isAnxiety = stimuliAnxiety.includes(stimulusDiv.innerText);
             const isCorrect = (rightCategory === 'Non Io' && isOther) ||
                               (rightCategory === 'Ansia' && isAnxiety) ||
-                              (rightCategory === 'Non Io + Ansia' && (isOther || isAnxiety));
+                              (rightCategory === 'Non Io e Ansia' && (isOther || isAnxiety));
             recordResponse(isCorrect);
         }
     });
