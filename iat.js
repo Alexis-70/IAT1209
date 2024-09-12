@@ -125,4 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             recordResponse(correctResponse);
         } else if (event.code === 'ArrowRight') {
             const correctResponse = checkCorrectResponse('right');
-            record
+            recordResponse(correctResponse);
+        }
+    });
+});
