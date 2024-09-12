@@ -62,10 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function recordResponse(isCorrect) {
-        endTime = new Date().getTime();
-        const reactionTime = endTime - startTime;
-
         if (isCorrect) {
+            errorMessage.classList.add('hidden');
+            endTime = new Date().getTime();
+            const reactionTime = endTime - startTime;
             reactionTimes.push(reactionTime);
             currentStimulusIndex++;
             if (currentStimulusIndex < 20) {
@@ -84,8 +84,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentBlock > 5) {
             endTest();
         } else {
-            showNextStimulus();
+            showBlockInfo();
         }
+    }
+
+    function showBlockInfo() {
+        iatContainer.classList.add('hidden');
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+        alert(blockMessage);
+        iatContainer.classList.remove('hidden');
+        showNextStimulus();
     }
 
     function endTest() {
