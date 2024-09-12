@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
-    const startBtn = document.getElementById('start-btn');
+    const startButton = document.getElementById('start-button');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+                const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function handleKeydown(event) {
+    function handleKeyDown(event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
@@ -209,12 +209,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function handleTouch(event) {
+    function handleTouchStart(event) {
         const touch = event.touches[0];
-        const screenWidth = window.innerWidth;
         const touchX = touch.clientX;
-
-        const isLeft = touchX < screenWidth / 2;
+        const windowWidth = window.innerWidth;
+        const isLeft = touchX < windowWidth / 2;
         const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
         const stimulusText = stimulusDiv.innerText;
         const isCorrect = isCorrectResponse(category, stimulusText);
@@ -222,18 +221,13 @@ document.addEventListener('DOMContentLoaded', function () {
         recordResponse(isCorrect);
     }
 
-    function handleStartButtonClick() {
+    // Event listeners for keyboard and touchscreen
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('touchstart', handleTouchStart);
+
+    // Event listener for the Start button
+    startButton.addEventListener('click', function () {
         startIAT();
-    }
-
-    document.addEventListener('keydown', handleKeydown);
-    document.addEventListener('touchstart', handleTouch);
-
-    startBtn.addEventListener('click', handleStartButtonClick);
-
-    // Ensure the start button is shown on mobile devices
-    if (window.innerWidth <= 768) {
-        startBtn.classList.remove('hidden');
-        iatContainer.classList.add('hidden');
-    }
+    });
 });
+
