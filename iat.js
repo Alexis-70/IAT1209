@@ -56,6 +56,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
+            case 5:
+                // Blocco 5: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia", 
+                // con "Io" e "Non Io" invertiti rispetto al blocco 3
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0]),
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
         }
         shuffleArray(stimulusList);
     }
@@ -95,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return 'Vergogna';
             case 3:
                 return 'Io e Vergogna';
+            case 5:
+                return 'Non Io e Ansia'; // Inversione per il blocco 5
             default:
                 return '';
         }
@@ -110,6 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return 'Ansia';
             case 3:
                 return 'Non Io e Ansia';
+            case 5:
+                return 'Io e Vergogna'; // Inversione per il blocco 5
             default:
                 return '';
         }
