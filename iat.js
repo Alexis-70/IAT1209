@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const stimuliShame = ['Imbarazzo', 'Timidezza']; // Stimoli associati a "Vergogna"
     const stimuliAnxiety = ['Ansia', 'Paura']; // Stimoli associati a "Ansia"
 
-    const stimuliPerBlock = 20; // Totale stimoli per blocco
-
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
