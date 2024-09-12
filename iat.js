@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isShame = stimuliShame.includes(stimulusText);
             const isAnxiety = stimuliAnxiety.includes(stimulusText);
 
-            let isCorrect;
+            let isCorrect = false;
             if (leftCategory === 'Io') {
                 isCorrect = isSelf;
             } else if (leftCategory === 'Vergogna') {
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isOther = stimulusText === 'Il nome di un altro';
             const isAnxiety = stimuliAnxiety.includes(stimulusText);
 
-            let isCorrect;
+            let isCorrect = false;
             if (rightCategory === 'Non Io') {
                 isCorrect = isOther;
             } else if (rightCategory === 'Ansia') {
