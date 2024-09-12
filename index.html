@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shame IAT Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        #iat-container {
+            margin-top: 50px;
+            position: relative;
+            height: 200px;
+        }
+        .corner {
+            position: absolute;
+            top: 20px;
+            font-size: 24px;
+        }
+        .left-corner {
+            left: 20px;
+        }
+        .right-corner {
+            right: 20px;
+        }
+        #stimulus {
+            font-size: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .error {
+            color: red;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        /* Stile per dispositivi mobili */
+        #touch-buttons {
+            margin-top: 30px;
+        }
+        .touch-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .touch-button:active {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shame IAT Test</h1>
+    <div id="instructions">
+        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia". Su dispositivi mobili, tocca i pulsanti.</p>
+        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
+    </div>
 
+    <div id="iat-container" class="hidden">
+@@ -78,12 +61,6 @@ <h2>Risultati</h2>
+        <p id="reaction-times"></p>
+    </div>
+
+    <!-- Pulsanti touch per dispositivi mobili -->
+    <div id="touch-buttons" class="hidden">
+        <button class="touch-button" id="left-button">Sinistra</button>
+        <button class="touch-button" id="right-button">Destra</button>
+    </div>
+
+    <script src="iat.js"></script>
+</body>
+</html>
