@@ -58,13 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-            case 4:
-                // Blocco 4: "Io" a destra e "Non Io" a sinistra
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-                ];
-                break;
             case 5:
                 // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
@@ -198,14 +191,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Event listener for start button
+    // Event listener per il pulsante di avvio
     startButton.addEventListener('click', function () {
         startIAT();
         startButton.classList.add('hidden');
         document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
     });
 
-    // Event listeners for touch buttons
+    // Event listeners per i pulsanti touch
     leftButton.addEventListener('click', function () {
         if (stimulusDiv.innerText) {
             const isCorrect = isCorrectResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
@@ -220,13 +213,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Event listener for keyboard events (for desktop)
+    // Event listener per gli eventi della tastiera (per desktop)
     document.addEventListener('keydown', function (event) {
-        if (event.code === 'Space') {
-            if (startButton.classList.contains('hidden')) {
-                startIAT();
-            }
-        } else if (event.code === 'ArrowLeft') {
+        if (event.code === 'ArrowLeft') {
             if (stimulusDiv.innerText) {
                 const isCorrect = isCorrectResponse(getCategoryLeftForBlock(currentBlock), stimulusDiv.innerText);
                 recordResponse(isCorrect);
@@ -236,7 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isCorrect = isCorrectResponse(getCategoryRightForBlock(currentBlock), stimulusDiv.innerText);
                 recordResponse(isCorrect);
             }
+        } else if (event.code === 'Space') {
+            if (startButton.classList.contains('hidden')) {
+                startIAT();
+            }
         }
     });
-
 });
