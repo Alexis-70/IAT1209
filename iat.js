@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Il tuo nome']; // Stimolo associato a "Io"
-    const stimuliOther = ['Il nome di un altro']; // Stimolo associato a "Non Io"
-    const stimuliShame = ['Imbarazzo', 'Timidezza']; // Stimoli associati a "Vergogna"
-    const stimuliAnxiety = ['Ansia', 'Paura']; // Stimoli associati a "Ansia"
+    const stimuliSelf = ['Io', 'Mio', 'Me', 'Me stesso', 'Miei']; // Stimolo associato a "Io"
+    const stimuliOther = ['Lui', 'Lei', 'Loro', 'Suo', 'Suoi']; // Stimolo associato a "Non Io"
+    const stimuliShame = ['Imbarazzo', 'Fallimento', 'Arrossamento', 'Rifiuto']; // Stimoli associati a "Vergogna"
+    const stimuliAnxiety = ['Ansia', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
@@ -37,40 +37,43 @@ document.addEventListener('DOMContentLoaded', function () {
             case 1:
             case 4:
                 stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0])
+                    ...getRandomStimuli(stimuliSelf, 10),
+                    ...getRandomStimuli(stimuliOther, 10)
                 ];
                 break;
             case 2:
                 stimulusList = [
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...getRandomStimuli(stimuliShame, 10),
+                    ...getRandomStimuli(stimuliAnxiety, 10)
                 ];
                 break;
             case 3:
                 stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
-                break;
-            case 4:
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliOther[0])
+                    ...getRandomStimuli(stimuliSelf, 10),
+                    ...getRandomStimuli(stimuliOther, 10),
+                    ...getRandomStimuli(stimuliShame, 10),
+                    ...getRandomStimuli(stimuliAnxiety, 10)
                 ];
                 break;
             case 5:
                 stimulusList = [
-                    ...Array(10).fill(stimuliOther[0]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliSelf[0]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...getRandomStimuli(stimuliOther, 10),
+                    ...getRandomStimuli(stimuliShame, 10),
+                    ...getRandomStimuli(stimuliSelf, 10),
+                    ...getRandomStimuli(stimuliAnxiety, 10)
                 ];
                 break;
         }
         shuffleArray(stimulusList);
+    }
+
+    function getRandomStimuli(stimuliArray, count) {
+        const randomStimuli = [];
+        for (let i = 0; i < count; i++) {
+            const randomIndex = Math.floor(Math.random() * stimuliArray.length);
+            randomStimuli.push(stimuliArray[randomIndex]);
+        }
+        return randomStimuli;
     }
 
     function shuffleArray(array) {
@@ -158,33 +161,43 @@ document.addEventListener('DOMContentLoaded', function () {
         const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi il pulsante Start per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
-        showNextStimulus();
+        showNextStimulus(); }
+  
+function endTest() {
+    iatContainer.classList.add('hidden');
+    resultsDiv.classList.remove('hidden');
+    reactionTimesDisplay.innerText = `I tuoi tempi di reazione: ${reactionTimes.join(', ')} ms`;
+}
+
+function handleTouchInput(side) {
+    const currentStimulus = stimulusDiv.innerText;
+    let isCorrect = false;
+
+    if (currentBlock === 1 || currentBlock === 4) {
+        if ((side === 'left' && currentStimulus === 'Il tuo nome') || (side === 'right' && currentStimulus === 'Il nome di un altro')) {
+            isCorrect = true;
+        }
+    } else if (currentBlock === 2 || currentBlock === 5) {
+        if ((side === 'left' && (currentStimulus === 'Imbarazzo' || currentStimulus === 'Timidezza')) || 
+            (side === 'right' && (currentStimulus === 'Ansia' || currentStimulus === 'Paura'))) {
+            isCorrect = true;
+        }
+    } else if (currentBlock === 3) {
+        if ((side === 'left' && (currentStimulus === 'Il tuo nome' || currentStimulus === 'Imbarazzo' || currentStimulus === 'Timidezza')) || 
+            (side === 'right' && (currentStimulus === 'Il nome di un altro' || currentStimulus === 'Ansia' || currentStimulus === 'Paura'))) {
+            isCorrect = true;
+        }
     }
 
-    function endTest() {
-        iatContainer.classList.add('hidden');
-        resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
-    }
+    recordResponse(isCorrect);
+}
 
-    startButton.addEventListener('click', function () {
-        startIAT();
-    });
+startButton.addEventListener('click', startIAT);
 
-    leftZone.addEventListener('click', function () {
-        const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
-                                (getCategoryLeftForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
-        recordResponse(correctResponse);
-    });
+leftZone.addEventListener('click', function () {
+    handleTouchInput('left');
+});
 
-    rightZone.addEventListener('click', function () {
-        const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Io' && stimulusDiv.innerText === stimuliSelf[0]) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText)) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText === stimuliOther[0]) ||
-                                (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
-        recordResponse(correctResponse);
-    });
+rightZone.addEventListener('click', function () {
+    handleTouchInput('right');
 });
