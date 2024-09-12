@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let startTime, endTime;
     const reactionTimes = [];
     let stimulusList = [];
+    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -27,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateStimuliForBlock(block) {
         stimulusList = [];
+        blockStimuliCount = 0; // Reset stimuli count for the new block
+
         switch (block) {
             case 1:
             case 4:
@@ -65,12 +68,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (currentStimulusIndex < stimulusList.length) {
-            errorMessage.classList.add('hidden');
-            stimulusDiv.innerText = stimulusList[currentStimulusIndex];
-            categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
-            categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-            startTime = new Date().getTime();
+        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+            if (currentStimulusIndex < stimulusList.length) {
+                errorMessage.classList.add('hidden');
+                stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+                categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
+                categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
+                startTime = new Date().getTime();
+                blockStimuliCount++;
+                currentStimulusIndex++;
+            } else {
+                nextBlock();
+            }
         } else {
             nextBlock();
         }
@@ -112,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
             reactionTimes.push(reactionTime);
-            currentStimulusIndex++;
             showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
@@ -134,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
+        currentStimulusIndex = 0; // Reset the index for the new block
         showNextStimulus();
     }
 
