@@ -4,10 +4,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const stimuliShame = ['Imbarazzo', 'Timidezza']; // Stimoli associati a "Vergogna"
     const stimuliAnxiety = ['Ansia', 'Paura']; // Stimoli associati a "Ansia"
 
+    const stimuliPerBlock = 20; // Totale stimoli per blocco
+
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
     const reactionTimes = [];
+    let stimulusList = [];
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -20,34 +23,55 @@ document.addEventListener('DOMContentLoaded', function () {
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
+        generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
 
-    function showNextStimulus() {
-        errorMessage.classList.add('hidden');
-        stimulusDiv.innerText = getStimulusForBlock(currentBlock);
-        categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
-        categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-        startTime = new Date().getTime();
+    function generateStimuliForBlock(block) {
+        stimulusList = [];
+        switch (block) {
+            case 1:
+            case 4:
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0])
+                ];
+                break;
+            case 2:
+            case 5:
+                stimulusList = [
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 3:
+                stimulusList = [
+                    ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0]),
+                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+        }
+        shuffleArray(stimulusList);
     }
 
-    function getStimulusForBlock(block) {
-        if (block === 1 || block === 4) {
-            return Math.random() > 0.5 
-                ? stimuliSelf[0] 
-                : stimuliOther[0];
-        } else if (block === 2 || block === 5) {
-            return Math.random() > 0.5 
-                ? stimuliShame[Math.floor(Math.random() * stimuliShame.length)] 
-                : stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)];
-        } else if (block === 3) {
-            return Math.random() > 0.5 
-                ? stimuliSelf[0] 
-                : stimuliShame[Math.floor(Math.random() * stimuliShame.length)];
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function showNextStimulus() {
+        if (currentStimulusIndex < stimulusList.length) {
+            errorMessage.classList.add('hidden');
+            stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+            categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
+            categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
+            startTime = new Date().getTime();
         } else {
-            return Math.random() > 0.5 
-                ? stimuliSelf[0] 
-                : stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)];
+            nextBlock();
         }
     }
 
@@ -88,11 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const reactionTime = endTime - startTime;
             reactionTimes.push(reactionTime);
             currentStimulusIndex++;
-            if (currentStimulusIndex < 20) {
-                showNextStimulus();
-            } else {
-                nextBlock();
-            }
+            showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
         }
@@ -100,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function nextBlock() {
         currentBlock++;
-        currentStimulusIndex = 0;
         if (currentBlock > 5) {
             endTest();
         } else {
@@ -113,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
+        generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
 
