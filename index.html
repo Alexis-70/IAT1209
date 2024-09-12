@@ -41,21 +41,30 @@
             font-size: 24px;
             margin-top: 20px;
         }
-        #start-button {
-            display: none;
-            margin-top: 20px;
-            font-size: 20px;
+        /* Stile per dispositivi mobili */
+        #touch-buttons {
+            margin-top: 30px;
+        }
+        .touch-button {
+            font-size: 18px;
             padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .touch-button:active {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <h1>Shame IAT Test</h1>
     <div id="instructions">
-        <p>Premi la barra spaziatrice per iniziare. Usa le frecce sinistra e destra per rispondere.</p>
+        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia". Su dispositivi mobili, tocca i pulsanti.</p>
     </div>
-    
-    <button id="start-button" class="hidden">Inizia Test</button>
 
     <div id="iat-container" class="hidden">
         <div id="category-left" class="corner left-corner"></div>
@@ -67,6 +76,12 @@
     <div id="results" class="hidden">
         <h2>Risultati</h2>
         <p id="reaction-times"></p>
+    </div>
+
+    <!-- Pulsanti touch per dispositivi mobili -->
+    <div id="touch-buttons" class="hidden">
+        <button class="touch-button" id="left-button">Sinistra</button>
+        <button class="touch-button" id="right-button">Destra</button>
     </div>
 
     <script src="iat.js"></script>
