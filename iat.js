@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
-        startBtn.classList.add('hidden');
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
