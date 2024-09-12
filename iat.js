@@ -211,9 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function handleKeyPress(event) {
-        if (event.code === 'Space') {
-            startIAT();
-        } else if (event.code === 'ArrowLeft') {
+        if (event.code === 'ArrowLeft') {
             const category = getCategoryLeftForBlock(currentBlock);
             const stimulusText = stimulusDiv.innerText;
             const isCorrect = isCorrectResponse(category, stimulusText);
