@@ -8,19 +8,25 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
-        }
-        .hidden {
-            display: none;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         #iat-container {
-            margin-top: 50px;
+            position: relative;
+            width: 100%;
+            height: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
         }
         .corner {
             position: absolute;
-            top: 20px;
+            top: 10px;
             font-size: 24px;
         }
         .left-corner {
@@ -31,18 +37,29 @@
         }
         #stimulus {
             font-size: 30px;
-            margin-top: 100px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #instructions, #pause-message {
+            font-size: 18px;
+            margin: 20px;
+        }
+        .hidden {
+            display: none;
         }
         .error {
             color: red;
             font-size: 24px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <h1>Shame IAT Test</h1>
+    
     <div id="instructions">
-        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
+        <p>Premi la barra spaziatrice per iniziare il test. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
     </div>
 
     <div id="iat-container" class="hidden">
@@ -51,6 +68,7 @@
         <div id="stimulus"></div>
     </div>
 
+    <div id="pause-message" class="hidden">Blocco completato. Premi la barra spaziatrice per iniziare il blocco successivo.</div>
     <div id="error-message" class="error hidden">X</div>
     <div id="results" class="hidden">
         <h2>Risultati</h2>
