@@ -34,45 +34,43 @@ document.addEventListener('DOMContentLoaded', function () {
             case 1:
             case 4:
                 // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-                ];
+                stimulusList = generateStimuli(stimuliSelf, 10)
+                    .concat(generateStimuli(stimuliOther, 10));
                 break;
             case 2:
                 // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
-                stimulusList = [
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                stimulusList = generateStimuli(stimuliShame, 10)
+                    .concat(generateStimuli(stimuliAnxiety, 10));
                 break;
             case 3:
                 // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                stimulusList = generateStimuli(stimuliSelf, 10)
+                    .concat(generateStimuli(stimuliOther, 10))
+                    .concat(generateStimuli(stimuliShame, 10))
+                    .concat(generateStimuli(stimuliAnxiety, 10));
                 break;
             case 4:
                 // Blocco 4: "Io" a destra e "Non Io" a sinistra
-                stimulusList = [
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-                ];
+                stimulusList = generateStimuli(stimuliSelf, 10)
+                    .concat(generateStimuli(stimuliOther, 10));
                 break;
             case 5:
                 // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
-                stimulusList = [
-                    ...Array(10).fill(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
+                stimulusList = generateStimuli(stimuliOther, 10)
+                    .concat(generateStimuli(stimuliShame, 10))
+                    .concat(generateStimuli(stimuliSelf, 10))
+                    .concat(generateStimuli(stimuliAnxiety, 10));
                 break;
         }
         shuffleArray(stimulusList);
+    }
+
+    function generateStimuli(stimuliArray, count) {
+        let result = [];
+        for (let i = 0; i < count; i++) {
+            result.push(stimuliArray[Math.floor(Math.random() * stimuliArray.length)]);
+        }
+        return result;
     }
 
     function shuffleArray(array) {
