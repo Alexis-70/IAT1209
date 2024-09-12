@@ -56,15 +56,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 4:
-                // Blocco 4: 10 stimoli per "Io" e 10 per "Non Io", con "Io" a destra e "Non Io" a sinistra
+                // Blocco 4: "Io" a destra e "Non Io" a sinistra
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0])
                 ];
                 break;
             case 5:
-                // Blocco 5: 10 stimoli per "Non Io", 10 per "Vergogna", 10 per "Io" e 10 per "Ansia",
-                // con "Non Io" e "Vergogna" a sinistra, e "Io" e "Ansia" a destra
+                // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
                     ...Array(10).fill(stimuliOther[0]),
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
