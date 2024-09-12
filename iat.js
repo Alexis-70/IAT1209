@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
+        startButton.classList.add('hidden'); // Hide start button if visible
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -158,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-                const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati!`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -169,65 +170,59 @@ document.addEventListener('DOMContentLoaded', function () {
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
+        const avgReactionTime = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
+        reactionTimesDisplay.innerText = `Tempo di reazione medio: ${avgReactionTime} ms`;
     }
 
-    function isCorrectResponse(category, stimulus) {
-        switch (category) {
-            case 'Io':
-                return stimulus === 'Il tuo nome';
-            case 'Non Io':
-                return stimulus === 'Il nome di un altro';
-            case 'Vergogna':
-                return stimuliShame.includes(stimulus);
-            case 'Ansia':
-                return stimuliAnxiety.includes(stimulus);
-            case 'Io e Vergogna':
-                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
-            case 'Non Io e Ansia':
-                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
-            case 'Non Io e Vergogna':
-                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
-            case 'Io e Ansia':
-                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
-            default:
-                return false;
-        }
-    }
-
-    function handleKeyDown(event) {
-        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
-            startIAT();
-        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
-            const isLeft = event.code === 'ArrowLeft';
-            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
-            const stimulusText = stimulusDiv.innerText;
-            const isCorrect = isCorrectResponse(category, stimulusText);
-
-            recordResponse(isCorrect);
+    function handleKeyPress(event) {
+        if (event.code === 'Space') {
+            if (iatContainer.classList.contains('hidden')) {
+                startIAT();
+            }
+        } else if (event.code === 'ArrowLeft') {
+            recordResponse(checkResponse('left'));
+        } else if (event.code === 'ArrowRight') {
+            recordResponse(checkResponse('right'));
         }
     }
 
     function handleTouchStart(event) {
-        const touch = event.touches[0];
-        const touchX = touch.clientX;
-        const windowWidth = window.innerWidth;
-        const isLeft = touchX < windowWidth / 2;
-        const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
-        const stimulusText = stimulusDiv.innerText;
-        const isCorrect = isCorrectResponse(category, stimulusText);
+        const touchX = event.touches[0].clientX;
+        const screenWidth = window.innerWidth;
 
-        recordResponse(isCorrect);
+        if (touchX < screenWidth / 2) {
+            recordResponse(checkResponse('left'));
+        } else {
+            recordResponse(checkResponse('right'));
+        }
     }
 
-    // Event listeners for keyboard and touchscreen
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('touchstart', handleTouchStart);
+    function checkResponse(side) {
+        const categoryLeft = getCategoryLeftForBlock(currentBlock);
+        const categoryRight = getCategoryRightForBlock(currentBlock);
+        const stimulus = stimulusList[currentStimulusIndex - 1];
+        if (side === 'left') {
+            return stimulus === categoryLeft;
+        } else {
+            return stimulus === categoryRight;
+        }
+    }
 
-    // Event listener for the Start button
-    startButton.addEventListener('click', function () {
-        startIAT();
+    // Event listeners
+    document.addEventListener('keydown', handleKeyPress);
+
+    startButton.addEventListener('click', function() {
+        if (iatContainer.classList.contains('hidden')) {
+            startIAT();
+        }
     });
-});
 
+    if ('ontouchstart' in window) {
+        // This is a touch device
+        document.addEventListener('touchstart', handleTouchStart);
+        startButton.classList.remove('hidden'); // Show start button for touch devices
+    } else {
+        // This is not a touch device
+        startButton.classList.add('hidden'); // Hide start button for non-touch devices
+    }
+});
