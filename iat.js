@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function nextBlock() {
         currentBlock++;
+        currentStimulusIndex = 0;
         if (currentBlock > 5) {
             endTest();
         } else {
@@ -164,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
+        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
