@@ -223,4 +223,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         recordResponse(isCorrect);
     });
+
+    // Inizio test su desktop
+    if (window.innerWidth > 768) {
+        document.addEventListener('keydown', function (event) {
+            if (event.code === 'Space') {
+                startIAT();
+            }
+        });
+    }
 });
