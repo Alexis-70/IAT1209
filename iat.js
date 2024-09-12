@@ -16,16 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
-    const touchButtons = document.getElementById('touch-buttons');
-
-    // Pulsanti touch per mobile
-    const leftButton = document.getElementById('left-button');
-    const rightButton = document.getElementById('right-button');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
-        touchButtons.classList.remove('hidden'); // Mostra i pulsanti touch su mobile
         showNextStimulus();
     }
 
@@ -48,24 +42,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getCategoryLeftForBlock(block) {
-        if (block === 1 || block === 4) {
+        if (block === 1 || block === 3) {
             return 'Io';
-        } else if (block === 2) {
+        } else if (block === 2 || block === 5) {
             return 'Vergogna';
-        } else if (block === 3) {
-            return 'Io / Vergogna';
         } else {
             return 'Non Io';
         }
     }
 
     function getCategoryRightForBlock(block) {
-        if (block === 1 || block === 4) {
+        if (block === 1 || block === 3) {
             return 'Non Io';
-        } else if (block === 2) {
+        } else if (block === 2 || block === 5) {
             return 'Ansia';
-        } else if (block === 3) {
-            return 'Non Io / Ansia';
         } else {
             return 'Io';
         }
@@ -100,31 +90,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        touchButtons.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice o tocca per continuare.`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
-        touchButtons.classList.remove('hidden');
         showNextStimulus();
     }
 
     function endTest() {
         iatContainer.classList.add('hidden');
-        touchButtons.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
         const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
         reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
-    // Eventi tastiera
     document.addEventListener('keydown', function (event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft') {
-            const correctResponse = checkCorrectResponse('left');
+            const correctResponse = (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('nome')) ||
+                                    (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliEmotion.includes(stimulusDiv.innerText));
             recordResponse(correctResponse);
         } else if (event.code === 'ArrowRight') {
-            const correctResponse = checkCorrectResponse('right');
+            const correctResponse = (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText.includes('altro')) ||
+                                    (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliEmotion.includes(stimulusDiv.innerText));
             recordResponse(correctResponse);
         }
     });
