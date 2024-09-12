@@ -219,8 +219,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     startButton.addEventListener('click', startIAT);
-    leftButton.addEventListener('click', () => handleTouch({ touches: [{ clientX: 0 }] }));
-    rightButton.addEventListener('click', () => handleTouch({ touches: [{ clientX: window.innerWidth }] }));
+    leftButton.addEventListener('click', () => {
+        handleTouch({ touches: [{ clientX: 0 }] });
+    });
+    rightButton.addEventListener('click', () => {
+        handleTouch({ touches: [{ clientX: window.innerWidth }] });
+    });
     document.addEventListener('touchstart', handleTouch);
     document.addEventListener('keydown', handleKeyPress);
 });
