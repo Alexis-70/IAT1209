@@ -41,7 +41,6 @@
             font-size: 24px;
             margin-top: 20px;
         }
-        /* Stile per dispositivi mobili */
         #touch-buttons {
             margin-top: 30px;
         }
@@ -58,31 +57,39 @@
         .touch-button:active {
             background-color: #0056b3;
         }
+        /* Stile per il pulsante di inizio */
+        #start-button-container {
+            margin-top: 50px;
+        }
         #start-button {
-            font-size: 20px;
-            padding: 15px 30px;
-            background-color: #28a745;
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         #start-button:active {
-            background-color: #218838;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <h1>Shame IAT Test</h1>
     <div id="instructions">
-        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
+        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia". Su dispositivi mobili, tocca i pulsanti.</p>
+    </div>
+
+    <div id="start-button-container" class="hidden">
+        <button id="start-button">Inizia Test</button>
     </div>
 
     <div id="iat-container" class="hidden">
         <div class="corner left-corner" id="category-left"></div>
         <div class="corner right-corner" id="category-right"></div>
         <div id="stimulus"></div>
-        <div class="error hidden" id="error-message">Errore, premi il tasto corretto.</div>
+        <div class="error hidden" id="error-message">Risposta errata!</div>
     </div>
 
     <div id="results" class="hidden">
@@ -90,15 +97,9 @@
         <p id="reaction-times"></p>
     </div>
 
-    <!-- Pulsanti touch per dispositivi mobili -->
     <div id="touch-buttons" class="hidden">
         <button class="touch-button" id="left-button">Sinistra</button>
         <button class="touch-button" id="right-button">Destra</button>
-    </div>
-
-    <!-- Pulsante per iniziare il test su mobile -->
-    <div id="start-button-container" class="hidden">
-        <button id="start-button">Inizia Test</button>
     </div>
 
     <script src="iat.js"></script>
