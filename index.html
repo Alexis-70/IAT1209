@@ -8,25 +8,19 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
         }
         #iat-container {
+            margin-top: 50px;
             position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 200px;
         }
         .corner {
             position: absolute;
-            top: 10px;
+            top: 20px;
             font-size: 24px;
         }
         .left-corner {
@@ -39,27 +33,37 @@
             font-size: 30px;
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-        }
-        #instructions, #pause-message {
-            font-size: 18px;
-            margin: 20px;
-        }
-        .hidden {
-            display: none;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         .error {
             color: red;
             font-size: 24px;
             margin-top: 20px;
         }
+        /* Stile per dispositivi mobili */
+        #touch-buttons {
+            margin-top: 30px;
+        }
+        .touch-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .touch-button:active {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <h1>Shame IAT Test</h1>
-    
     <div id="instructions">
-        <p>Premi la barra spaziatrice per iniziare il test. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
+        <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia". Su dispositivi mobili, tocca i pulsanti.</p>
     </div>
 
     <div id="iat-container" class="hidden">
@@ -68,11 +72,16 @@
         <div id="stimulus"></div>
     </div>
 
-    <div id="pause-message" class="hidden">Blocco completato. Premi la barra spaziatrice per iniziare il blocco successivo.</div>
     <div id="error-message" class="error hidden">X</div>
     <div id="results" class="hidden">
         <h2>Risultati</h2>
         <p id="reaction-times"></p>
+    </div>
+
+    <!-- Pulsanti touch per dispositivi mobili -->
+    <div id="touch-buttons" class="hidden">
+        <button class="touch-button" id="left-button">Sinistra</button>
+        <button class="touch-button" id="right-button">Destra</button>
     </div>
 
     <script src="iat.js"></script>
