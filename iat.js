@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
+    const startBtn = document.getElementById('start-btn');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
+        startBtn.classList.add('hidden');
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -195,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    document.addEventListener('keydown', function (event) {
+    function handleKeydown(event) {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
@@ -206,5 +208,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
             recordResponse(isCorrect);
         }
-    });
+    }
+
+    function handleTouch(event) {
+        const touch = event.touches[0];
+        const screenWidth = window.innerWidth;
+        const touchX = touch.clientX;
+
+        const isLeft = touchX < screenWidth / 2;
+        const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
+        const stimulusText = stimulusDiv.innerText;
+        const isCorrect = isCorrectResponse(category, stimulusText);
+
+        recordResponse(isCorrect);
+    }
+
+    function handleStartButtonClick() {
+        startIAT();
+    }
+
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('touchstart', handleTouch);
+
+    startBtn.addEventListener('click', handleStartButtonClick);
+
+    // Ensure the start button is shown on mobile devices
+    if (window.innerWidth <= 768) {
+        startBtn.classList.remove('hidden');
+        iatContainer.classList.add('hidden');
+    }
 });
