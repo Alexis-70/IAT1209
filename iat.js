@@ -51,20 +51,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getCategoryLeftForBlock(block) {
-        if (block === 1 || block === 3) {
-            return block === 3 ? 'Io + Vergogna' : 'Io';
+        if (block === 1 || block === 4) {
+            return 'Io';
         } else if (block === 2 || block === 5) {
             return 'Vergogna';
+        } else if (block === 3) {
+            return 'Io + Vergogna';
         } else {
             return 'Non Io';
         }
     }
 
     function getCategoryRightForBlock(block) {
-        if (block === 1 || block === 3) {
-            return block === 3 ? 'Non Io + Ansia' : 'Non Io';
+        if (block === 1 || block === 4) {
+            return 'Non Io';
         } else if (block === 2 || block === 5) {
             return 'Ansia';
+        } else if (block === 3) {
+            return 'Non Io + Ansia';
         } else {
             return 'Io';
         }
@@ -116,17 +120,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
         } else if (event.code === 'ArrowLeft') {
-            const correctResponse = (currentBlock === 3 && stimulusDiv.innerText.includes('nome')) ||
-                                    (currentBlock === 3 && stimuliShame.includes(stimulusDiv.innerText)) ||
-                                    (getCategoryLeftForBlock(currentBlock) === 'Io' && stimulusDiv.innerText.includes('tuo nome')) ||
-                                    (getCategoryLeftForBlock(currentBlock) === 'Vergogna' && stimuliShame.includes(stimulusDiv.innerText));
-            recordResponse(correctResponse);
+            const leftCategory = getCategoryLeftForBlock(currentBlock);
+            const isSelf = stimulusDiv.innerText.includes('nome');
+            const isShame = stimuliShame.includes(stimulusDiv.innerText);
+            const isCorrect = (leftCategory === 'Io' && isSelf) ||
+                              (leftCategory === 'Vergogna' && isShame) ||
+                              (leftCategory === 'Io + Vergogna' && (isSelf || isShame));
+            recordResponse(isCorrect);
         } else if (event.code === 'ArrowRight') {
-            const correctResponse = (currentBlock === 3 && stimulusDiv.innerText.includes('altro')) ||
-                                    (currentBlock === 3 && stimuliAnxiety.includes(stimulusDiv.innerText)) ||
-                                    (getCategoryRightForBlock(currentBlock) === 'Non Io' && stimulusDiv.innerText.includes('altro')) ||
-                                    (getCategoryRightForBlock(currentBlock) === 'Ansia' && stimuliAnxiety.includes(stimulusDiv.innerText));
-            recordResponse(correctResponse);
+            const rightCategory = getCategoryRightForBlock(currentBlock);
+            const isOther = stimulusDiv.innerText.includes('altro');
+            const isAnxiety = stimuliAnxiety.includes(stimulusDiv.innerText);
+            const isCorrect = (rightCategory === 'Non Io' && isOther) ||
+                              (rightCategory === 'Ansia' && isAnxiety) ||
+                              (rightCategory === 'Non Io + Ansia' && (isOther || isAnxiety));
+            recordResponse(isCorrect);
         }
     });
 });
