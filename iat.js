@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimoli associati a "Io"
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimoli associati a "Non Io"
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
     const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
     const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
 
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
     startButton.addEventListener('click', function () {
         startIAT();
         startButton.classList.add('hidden');
-        document.getElementById('touch-buttons').classList.remove('hidden');
+        document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
     });
 
     // Event listeners for touch buttons
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         recordResponse(isCorrectResponse(categoryLeft, stimulus));
     });
 
-       rightButton.addEventListener('click', function () {
+    rightButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryRight = getCategoryRightForBlock(currentBlock);
         recordResponse(isCorrectResponse(categoryRight, stimulus));
