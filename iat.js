@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         switch (block) {
             case 1:
             case 4:
+                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0])
@@ -37,12 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             case 2:
             case 5:
+                // Blocchi 2 e 5: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
+                // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliOther[0]),
