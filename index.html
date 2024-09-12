@@ -41,6 +41,17 @@
             font-size: 24px;
             margin-top: 20px;
         }
+        #start-btn {
+            display: none;
+            font-size: 24px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -48,19 +59,17 @@
     <div id="instructions">
         <p>Premi la barra spaziatrice per iniziare. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".</p>
     </div>
-
+    <button id="start-btn" class="hidden">Start</button>
     <div id="iat-container" class="hidden">
         <div id="category-left" class="corner left-corner"></div>
         <div id="category-right" class="corner right-corner"></div>
         <div id="stimulus"></div>
     </div>
-
     <div id="error-message" class="error hidden">X</div>
     <div id="results" class="hidden">
         <h2>Risultati</h2>
         <p id="reaction-times"></p>
     </div>
-
     <script src="iat.js"></script>
 </body>
 </html>
