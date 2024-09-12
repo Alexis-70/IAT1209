@@ -40,8 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 2:
-            case 5:
-                // Blocchi 2 e 5: 10 stimoli per "Vergogna" e 10 per "Ansia"
+                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
@@ -56,13 +55,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-            case 5:
-                // Blocco 5: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia", 
-                // con "Io" e "Non Io" invertiti rispetto al blocco 3
+            case 4:
+                // Blocco 4: 10 stimoli per "Io" e 10 per "Non Io", con "Io" a destra e "Non Io" a sinistra
                 stimulusList = [
                     ...Array(10).fill(stimuliSelf[0]),
+                    ...Array(10).fill(stimuliOther[0])
+                ];
+                break;
+            case 5:
+                // Blocco 5: 10 stimoli per "Non Io", 10 per "Vergogna", 10 per "Io" e 10 per "Ansia",
+                // con "Non Io" e "Vergogna" a sinistra, e "Io" e "Ansia" a destra
+                stimulusList = [
                     ...Array(10).fill(stimuliOther[0]),
                     ...Array(10).fill(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill(stimuliSelf[0]),
                     ...Array(10).fill(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
@@ -98,15 +104,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryLeftForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
                 return 'Io';
             case 2:
-            case 5:
                 return 'Vergogna';
             case 3:
                 return 'Io e Vergogna';
+            case 4:
+                return 'Non Io'; // Blocco 4
             case 5:
-                return 'Non Io e Ansia'; // Inversione per il blocco 5
+                return 'Non Io e Vergogna'; // Blocco 5
             default:
                 return '';
         }
@@ -115,15 +121,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function getCategoryRightForBlock(block) {
         switch (block) {
             case 1:
-            case 4:
                 return 'Non Io';
             case 2:
-            case 5:
                 return 'Ansia';
             case 3:
                 return 'Non Io e Ansia';
+            case 4:
+                return 'Io'; // Blocco 4
             case 5:
-                return 'Io e Vergogna'; // Inversione per il blocco 5
+                return 'Io e Ansia'; // Blocco 5
             default:
                 return '';
         }
@@ -181,6 +187,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
             case 'Non Io e Ansia':
                 return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
+            case 'Non Io e Vergogna':
+                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
+            case 'Io e Ansia':
+                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
             default:
                 return false;
         }
