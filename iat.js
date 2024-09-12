@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Mio', 'Me', 'Me stesso', 'Miei']; // Stimolo associato a "Io"
-    const stimuliOther = ['Lui', 'Lei', 'Loro', 'Suo', 'Suoi']; // Stimolo associato a "Non Io"
-    const stimuliShame = ['Imbarazzo', 'Fallimento', 'Arrossamento', 'Rifiuto']; // Stimoli associati a "Vergogna"
-    const stimuliAnxiety = ['Ansia', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
+    const stimuliSelf = ['Il tuo nome']; // Stimolo associato a "Io"
+    const stimuliOther = ['Il nome di un altro']; // Stimolo associato a "Non Io"
+    const stimuliShame = ['Imbarazzo', 'Timidezza']; // Stimoli associati a "Vergogna"
+    const stimuliAnxiety = ['Ansia', 'Paura']; // Stimoli associati a "Ansia"
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
