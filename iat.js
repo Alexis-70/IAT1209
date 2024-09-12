@@ -18,12 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const iatContainer = document.getElementById('iat-container');
     const resultsDiv = document.getElementById('results');
     const reactionTimesDisplay = document.getElementById('reaction-times');
-    const startButton = document.getElementById('start-button');
 
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
-        startButton.classList.add('hidden'); // Hide start button if visible
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -159,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati!`;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Preparati! Premi la barra spaziatrice per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -170,59 +168,43 @@ document.addEventListener('DOMContentLoaded', function () {
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo di reazione medio: ${avgReactionTime} ms`;
+        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
+        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
-    function handleKeyPress(event) {
-        if (event.code === 'Space') {
-            if (iatContainer.classList.contains('hidden')) {
-                startIAT();
-            }
-        } else if (event.code === 'ArrowLeft') {
-            recordResponse(checkResponse('left'));
-        } else if (event.code === 'ArrowRight') {
-            recordResponse(checkResponse('right'));
+    function isCorrectResponse(category, stimulus) {
+        switch (category) {
+            case 'Io':
+                return stimulus === 'Il tuo nome';
+            case 'Non Io':
+                return stimulus === 'Il nome di un altro';
+            case 'Vergogna':
+                return stimuliShame.includes(stimulus);
+            case 'Ansia':
+                return stimuliAnxiety.includes(stimulus);
+            case 'Io e Vergogna':
+                return stimulus === 'Il tuo nome' || stimuliShame.includes(stimulus);
+            case 'Non Io e Ansia':
+                return stimulus === 'Il nome di un altro' || stimuliAnxiety.includes(stimulus);
+            case 'Non Io e Vergogna':
+                return stimulus === 'Il nome di un altro' || stimuliShame.includes(stimulus);
+            case 'Io e Ansia':
+                return stimulus === 'Il tuo nome' || stimuliAnxiety.includes(stimulus);
+            default:
+                return false;
         }
     }
 
-    function handleTouchStart(event) {
-        const touchX = event.touches[0].clientX;
-        const screenWidth = window.innerWidth;
-
-        if (touchX < screenWidth / 2) {
-            recordResponse(checkResponse('left'));
-        } else {
-            recordResponse(checkResponse('right'));
-        }
-    }
-
-    function checkResponse(side) {
-        const categoryLeft = getCategoryLeftForBlock(currentBlock);
-        const categoryRight = getCategoryRightForBlock(currentBlock);
-        const stimulus = stimulusList[currentStimulusIndex - 1];
-        if (side === 'left') {
-            return stimulus === categoryLeft;
-        } else {
-            return stimulus === categoryRight;
-        }
-    }
-
-    // Event listeners
-    document.addEventListener('keydown', handleKeyPress);
-
-    startButton.addEventListener('click', function() {
-        if (iatContainer.classList.contains('hidden')) {
+    document.addEventListener('keydown', function (event) {
+        if (event.code === 'Space' && iatContainer.classList.contains('hidden')) {
             startIAT();
+        } else if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+            const isLeft = event.code === 'ArrowLeft';
+            const category = isLeft ? getCategoryLeftForBlock(currentBlock) : getCategoryRightForBlock(currentBlock);
+            const stimulusText = stimulusDiv.innerText;
+            const isCorrect = isCorrectResponse(category, stimulusText);
+
+            recordResponse(isCorrect);
         }
     });
-
-    if ('ontouchstart' in window) {
-        // This is a touch device
-        document.addEventListener('touchstart', handleTouchStart);
-        startButton.classList.remove('hidden'); // Show start button for touch devices
-    } else {
-        // This is not a touch device
-        startButton.classList.add('hidden'); // Hide start button for non-touch devices
-    }
 });
