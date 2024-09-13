@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
-    const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
-    const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso'];
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi'];
+    const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto'];
+    const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia'];
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
     const reactionTimes = [];
     let stimulusList = [];
-    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
+    let blockStimuliCount = 0;
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const rightButton = document.getElementById('right-button');
 
     function startIAT() {
+        console.log('Starting IAT...'); // Debug
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -30,27 +31,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateStimuliForBlock(block) {
+        console.log(`Generating stimuli for block ${block}`); // Debug
         stimulusList = [];
-        blockStimuliCount = 0; // Reset stimuli count for the new block
+        blockStimuliCount = 0;
 
         switch (block) {
             case 1:
             case 4:
-                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
                 ];
                 break;
             case 2:
-                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
-                // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
@@ -59,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 5:
-                // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
@@ -79,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+        console.log('Showing next stimulus...'); // Debug
+        if (blockStimuliCount < 20) {
             if (currentStimulusIndex < stimulusList.length) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
@@ -105,9 +104,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Io e Vergogna';
             case 4:
-                return 'Non Io'; // Blocco 4
+                return 'Non Io';
             case 5:
-                return 'Non Io e Vergogna'; // Blocco 5
+                return 'Non Io e Vergogna';
             default:
                 return '';
         }
@@ -122,15 +121,16 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Non Io e Ansia';
             case 4:
-                return 'Io'; // Blocco 4
+                return 'Io';
             case 5:
-                return 'Io e Ansia'; // Blocco 5
+                return 'Io e Ansia';
             default:
                 return '';
         }
     }
 
     function recordResponse(isCorrect) {
+        console.log(`Recording response: ${isCorrect}`); // Debug
         if (isCorrect) {
             errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function nextBlock() {
+        console.log('Moving to next block...'); // Debug
         currentBlock++;
         if (currentBlock > 5) {
             endTest();
@@ -161,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
+        currentStimulusIndex = 0;
         showNextStimulus();
     }
 
@@ -172,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function calculateAndDisplayResults() {
+        console.log('Calculating and displaying results...'); // Debug
         const blocks = [1, 2, 3, 4, 5];
         let results = {};
 
