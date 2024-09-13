@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimoli associati a "Io"
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimoli associati a "Non Io"
     const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
     const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
 
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let startTime, endTime;
     const reactionTimes = [];
     let stimulusList = [];
-    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
+    let blockStimuliCount = 0; // Conta il numero di stimoli mostrati nel blocco corrente
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateStimuliForBlock(block) {
         stimulusList = [];
-        blockStimuliCount = 0; // Reset stimuli count for the new block
+        blockStimuliCount = 0;
 
         switch (block) {
             case 1:
@@ -58,13 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-            case 4:
-                // Blocco 4: "Io" a destra e "Non Io" a sinistra
-                stimulusList = [
-                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-                ];
-                break;
             case 5:
                 // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
                 stimulusList = [
@@ -86,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+        if (blockStimuliCount < 20) {
             if (currentStimulusIndex < stimulusList.length) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
@@ -112,9 +105,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Io e Vergogna';
             case 4:
-                return 'Non Io'; // Blocco 4
+                return 'Non Io'; 
             case 5:
-                return 'Non Io e Vergogna'; // Blocco 5
+                return 'Non Io e Vergogna';
             default:
                 return '';
         }
@@ -129,9 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Non Io e Ansia';
             case 4:
-                return 'Io'; // Blocco 4
+                return 'Io'; 
             case 5:
-                return 'Io e Ansia'; // Blocco 5
+                return 'Io e Ansia'; 
             default:
                 return '';
         }
@@ -164,70 +157,48 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
+        currentStimulusIndex = 0;
         showNextStimulus();
+    }
+
+    function standardDeviation(values) {
+        const avg = values.reduce((a, b) => a + b) / values.length;
+        const squareDiffs = values.map(value => Math.pow(value - avg, 2));
+        const avgSquareDiff = squareDiffs.reduce((a, b) => a + b) / squareDiffs.length;
+        return Math.sqrt(avgSquareDiff);
     }
 
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
+        
+        const block3Times = reactionTimes.slice(40, 80); // Blocco 3
+        const block5Times = reactionTimes.slice(120, 160); // Blocco 5
+        const block1Times = reactionTimes.slice(0, 20);  // Blocco 1
+        const block4Times = reactionTimes.slice(100, 120);  // Blocco 4
+
+        const avgBlock3 = block3Times.reduce((a, b) => a + b) / block3Times.length;
+        const avgBlock5 = block5Times.reduce((a, b) => a + b) / block5Times.length;
+        const avgBlock1 = block1Times.reduce((a, b) => a + b) / block1Times.length;
+        const avgBlock4 = block4Times.reduce((a, b) => a + b) / block4Times.length;
+
+        const sdBlock3_1 = standardDeviation([...block3Times, ...block1Times]);
+        const sdBlock5_4 = standardDeviation([...block5Times, ...block4Times]);
+
+        const D1 = (avgBlock3 - avgBlock1) / sdBlock3_1;
+        const D2 = (avgBlock5 - avgBlock4) / sdBlock5_4;
+
+        const finalD = (D1 + D2) / 2;
+
+        reactionTimesDisplay.innerText = `Punteggio D: ${finalD.toFixed(2)}\nInterpretazione: ${
+            finalD > 0 ? 'Associazione più forte tra "Io" e "Vergogna"' : 'Associazione più forte tra "Io" e "Ansia"'
+        }`;
     }
 
-    function isCorrectResponse(category, stimulus) {
-        switch (category) {
-            case 'Io':
-                return stimuliSelf.includes(stimulus);
-            case 'Non Io':
-                return stimuliOther.includes(stimulus);
-            case 'Vergogna':
-                return stimuliShame.includes(stimulus);
-            case 'Ansia':
-                return stimuliAnxiety.includes(stimulus);
-            case 'Io e Vergogna':
-                return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
-            case 'Non Io e Ansia':
-                return stimuliOther.includes(stimulus) || stimuliAnxiety.includes(stimulus);
-            case 'Non Io e Vergogna':
-                return stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus);
-            case 'Io e Ansia':
-                return stimuliSelf.includes(stimulus) || stimuliAnxiety.includes(stimulus);
-            default:
-                return false;
-        }
-    }
-
-    // Event listener for start button
     startButton.addEventListener('click', function () {
         startIAT();
         startButton.classList.add('hidden');
-        document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
+        document.getElementById('touch-buttons').classList.remove('hidden');
     });
 
-    // Event listeners for touch buttons
-    leftButton.addEventListener('click', function () {
-        const stimulus = stimulusDiv.innerText;
-        const categoryLeft = getCategoryLeftForBlock(currentBlock);
-        recordResponse(isCorrectResponse(categoryLeft, stimulus));
-    });
-
-    rightButton.addEventListener('click', function () {
-        const stimulus = stimulusDiv.innerText;
-        const categoryRight = getCategoryRightForBlock(currentBlock);
-        recordResponse(isCorrectResponse(categoryRight, stimulus));
-    });
-
-    // For desktop compatibility, use arrow keys for responses
-    document.addEventListener('keydown', function (event) {
-        const stimulus = stimulusDiv.innerText;
-        if (event.key === 'ArrowLeft') {
-            const categoryLeft = getCategoryLeftForBlock(currentBlock);
-            recordResponse(isCorrectResponse(categoryLeft, stimulus));
-        } else if (event.key === 'ArrowRight') {
-            const categoryRight = getCategoryRightForBlock(currentBlock);
-            recordResponse(isCorrectResponse(categoryRight, stimulus));
-        }
-    });
-
-});
+   
