@@ -7,7 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
-    const reactionTimes = [];
+    const reactionTimes = {
+        'Io_Vergogna': [],
+        'NonIo_Vergogna': [],
+        'Io_Ansia': [],
+        'NonIo_Ansia': []
+    };
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
 
@@ -142,7 +147,23 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
-            reactionTimes.push(reactionTime);
+
+            // Record reaction times based on current block
+            switch (currentBlock) {
+                case 1:
+                    reactionTimes['Io_Vergogna'].push(reactionTime);
+                    break;
+                case 2:
+                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                    break;
+                case 3:
+                    reactionTimes['Io_Ansia'].push(reactionTime);
+                    break;
+                case 4:
+                    reactionTimes['NonIo_Ansia'].push(reactionTime);
+                    break;
+            }
+
             showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
@@ -171,8 +192,28 @@ document.addEventListener('DOMContentLoaded', function () {
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
-        const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
+
+        // Calculate average reaction times for each condition
+        const avgRT_Io_Vergogna = average(reactionTimes['Io_Vergogna']);
+        const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
+        const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
+        const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
+
+        // Calculate the D-score
+        const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
+        const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
+
+        // Display results
+        reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
+    }
+
+    function average(arr) {
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+    }
+
+    function standardDeviation(arr) {
+        const avg = average(arr);
+        return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
     }
 
     function isCorrectResponse(category, stimulus) {
