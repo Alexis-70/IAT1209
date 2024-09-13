@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
+        const blockMessage = Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
         const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
+        reactionTimesDisplay.innerText = Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms;
     }
 
     function isCorrectResponse(category, stimulus) {
@@ -187,10 +187,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 return stimuliAnxiety.includes(stimulus);
             case 'Io e Vergogna':
                 return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
-            case 'Non Io e Vergogna':
-                return stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Non Io e Ansia':
                 return stimuliOther.includes(stimulus) || stimuliAnxiety.includes(stimulus);
+            case 'Non Io e Vergogna':
+                return stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Io e Ansia':
                 return stimuliSelf.includes(stimulus) || stimuliAnxiety.includes(stimulus);
             default:
@@ -198,31 +198,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function handleKeyPress(event) {
-        const key = event.key.toLowerCase();
-        if (key === 'a' || key === 'ArrowLeft') {
-            const correct = isCorrectResponse(categoryLeftDiv.innerText, stimulusDiv.innerText);
-            recordResponse(correct);
-        } else if (key === 'l' || key === 'ArrowRight') {
-            const correct = isCorrectResponse(categoryRightDiv.innerText, stimulusDiv.innerText);
-            recordResponse(correct);
+    // Event listener for start button
+    startButton.addEventListener('click', function () {
+        startIAT();
+        startButton.classList.add('hidden');
+        document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
+    });
+
+    // Event listeners for touch buttons
+    leftButton.addEventListener('click', function () {
+        const stimulus = stimulusDiv.innerText;
+        const categoryLeft = getCategoryLeftForBlock(currentBlock);
+        recordResponse(isCorrectResponse(categoryLeft, stimulus));
+    });
+
+    rightButton.addEventListener('click', function () {
+        const stimulus = stimulusDiv.innerText;
+        const categoryRight = getCategoryRightForBlock(currentBlock);
+        recordResponse(isCorrectResponse(categoryRight, stimulus));
+    });
+
+    // For desktop compatibility, use arrow keys for responses
+    document.addEventListener('keydown', function (event) {
+        const stimulus = stimulusDiv.innerText;
+        if (event.key === 'ArrowLeft') {
+            const categoryLeft = getCategoryLeftForBlock(currentBlock);
+            recordResponse(isCorrectResponse(categoryLeft, stimulus));
+        } else if (event.key === 'ArrowRight') {
+            const categoryRight = getCategoryRightForBlock(currentBlock);
+            recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
-    }
+    });
 
-    function handleTouchButton(event) {
-        const buttonId = event.target.id;
-        if (buttonId === 'left-button') {
-            const correct = isCorrectResponse(categoryLeftDiv.innerText, stimulusDiv.innerText);
-            recordResponse(correct);
-        } else if (buttonId === 'right-button') {
-            const correct = isCorrectResponse(categoryRightDiv.innerText, stimulusDiv.innerText);
-            recordResponse(correct);
-        }
-    }
-
-    startButton.addEventListener('click', startIAT);
-
-    document.addEventListener('keydown', handleKeyPress);
-    leftButton.addEventListener('click', handleTouchButton);
-    rightButton.addEventListener('click', handleTouchButton);
 });
