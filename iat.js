@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.;
+        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
         const avgReactionTime = reactionTimes.reduce((a, b) => a + b) / reactionTimes.length;
-        reactionTimesDisplay.innerText = Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms;
+        reactionTimesDisplay.innerText = `Tempo medio di reazione: ${avgReactionTime.toFixed(2)} ms`;
     }
 
     function isCorrectResponse(category, stimulus) {
