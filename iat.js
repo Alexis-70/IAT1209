@@ -212,36 +212,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
-     // Funzione per inviare i dati a Google Forms
-function sendDataToGoogleForms(punteggioD, nome, cognome) {
-    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse"; // Sostituisci con il tuo Google Form ID
-    
-    const formData = new FormData();
-    
-    // Aggiungi i dati ai rispettivi ID del modulo
-    formData.append("entry.647646594", nome);       // Sostituisci con l'ID corretto per "Nome"
-    formData.append("entry.897705250", cognome);    // Sostituisci con l'ID corretto per "Cognome"
-    formData.append("entry.1931265886", punteggioD); // Sostituisci con l'ID corretto per "Punteggio D"
-
-    // Invia i dati tramite fetch
-    fetch(formURL, {
-        method: "POST",
-        body: formData,
-        mode: "no-cors"  // Necessario per evitare problemi di CORS
-    })
-    .then(() => {
-        console.log("Dati inviati con successo!");
-    })
-    .catch((error) => {
-        console.error("Errore durante l'invio dei dati: ", error);
-    });
-}
-
-// Ora inserisci nome, cognome e invia il punteggio D
-const nome = prompt("Inserisci il tuo nome:");
-const cognome = prompt("Inserisci il tuo cognome:");
-sendDataToGoogleForms(D, nome, cognome);
-
 
     function average(arr) {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
