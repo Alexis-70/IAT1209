@@ -212,7 +212,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function calculateResults() {
-        // Calcolo dei risultati IAT
         const totalTimes = {
             'Io_Vergogna': reactionTimes['Io_Vergogna'].reduce((a, b) => a + b, 0),
             'NonIo_Vergogna': reactionTimes['NonIo_Vergogna'].reduce((a, b) => a + b, 0),
