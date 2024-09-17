@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
+    let lastStimulus = null; // Track the last stimulus shown
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function generateStimuliForBlock(block) {
         stimulusList = [];
         blockStimuliCount = 0;
+        lastStimulus = null; // Reset lastStimulus for the new block
 
         switch (block) {
             case 1:
@@ -96,13 +98,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function showNextStimulus() {
         if (blockStimuliCount < 20 || currentStimulusIndex < stimulusList.length) { // Ensure correct number of stimuli per block
             if (currentStimulusIndex < stimulusList.length) {
+                let newStimulus;
+                do {
+                    newStimulus = stimulusList[currentStimulusIndex];
+                    currentStimulusIndex++;
+                } while (newStimulus === lastStimulus && currentStimulusIndex < stimulusList.length);
+
                 errorMessage.classList.add('hidden');
-                stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+                stimulusDiv.innerText = newStimulus;
                 categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
                 categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
                 startTime = new Date().getTime();
                 blockStimuliCount++;
-                currentStimulusIndex++;
+                lastStimulus = newStimulus; // Update the lastStimulus
             } else {
                 nextBlock();
             }
