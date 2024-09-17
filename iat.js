@@ -189,15 +189,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function showBlockInfo() {
-        iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
-        alert(blockMessage);
-        iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0;
-        showNextStimulus();
-    }
+   function showBlockInfo() {
+    iatContainer.classList.add('hidden');
+    
+    // Ottieni le categorie per sinistra e destra
+    const leftCategory = getCategoryLeftForBlock(currentBlock);
+    const rightCategory = getCategoryRightForBlock(currentBlock);
+    
+    // Crea il messaggio dinamico
+    const blockMessage = `Inizia il blocco ${currentBlock}. In questo blocco bisognerà premere a sinistra per assegnare le parole alla categoria "${leftCategory}", e premere a destra per la categoria "${rightCategory}". Premi il pulsante "Inizia" per continuare.`;
+
+    // Mostra il messaggio all'utente (puoi usare un alert, o personalizzare con una modale)
+    alert(blockMessage);
+    
+    iatContainer.classList.remove('hidden');
+    generateStimuliForBlock(currentBlock);
+    currentStimulusIndex = 0;
+    showNextStimulus();
+}
+
 
     function endTest() {
         iatContainer.classList.add('hidden');
