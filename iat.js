@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
   function sendScoreToGoogleForms(scoreD) {
-    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/viewform?usp=sf_link'; // Sostituisci con l'ID del tuo modulo Google Form
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse'; // Sostituisci con l'ID del tuo modulo Google Form
     const formData = new URLSearchParams();
     
     // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
