@@ -213,6 +213,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
 
+        // Codice per inviare i dati al Google Form
+        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse'; // Inserisci qui l'URL del tuo Google Form
+        const data = {
+            'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
+            'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
+            'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
+        };
+
+        const formData = new URLSearchParams(data).toString();
+        fetch(formUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                console.log('Dati inviati con successo.');
+            } else {
+                console.log('Errore nell\'invio dei dati.');
+            }
+        }).catch(error => {
+            console.error('Errore:', error);
+        });
+    }
+    
     function average(arr) {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
     }
