@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const rightCategory = getCategoryRightForBlock(currentBlock);
     
     // Crea il messaggio dinamico
-    const blockMessage = `Inizia il blocco ${currentBlock}. In questo blocco bisognerà premere a sinistra per assegnare le parole alla categoria "${leftCategory}", e premere a destra per la categoria "${rightCategory}". Premi il pulsante "Inizia" per continuare.`;
+    const blockMessage = `Inizia il blocco ${currentBlock}. In questo blocco bisognerà premere a sinistra per assegnare le parole alla categoria "${leftCategory}", e premere a destra per la categoria "${rightCategory}". Ricordi di premere i pulsanti il più velocemente possibile. Prema il pulsante "Inizia" per continuare.`;
 
     // Mostra il messaggio all'utente (puoi usare un alert, o personalizzare con una modale)
     alert(blockMessage);
