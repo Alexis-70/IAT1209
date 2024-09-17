@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
-    let familiarizationStimuliCount = 0; // Track the number of familiarization stimuli
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -38,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function generateStimuliForBlock(block) {
         stimulusList = [];
         blockStimuliCount = 0; // Reset stimuli count for the new block
-        familiarizationStimuliCount = 0; // Reset familiarization stimuli count for the new block
 
         switch (block) {
             case 1:
@@ -212,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCorrectResponse(category, stimulus) {
+        console.log(`Stimulus: ${stimulus}, Category: ${category}`);
         switch (category) {
             case 'Io':
                 return stimuliSelf.includes(stimulus);
@@ -245,12 +244,14 @@ document.addEventListener('DOMContentLoaded', function () {
     leftButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryLeft = getCategoryLeftForBlock(currentBlock);
+        console.log(`Left Button Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft}`);
         recordResponse(isCorrectResponse(categoryLeft, stimulus));
     });
 
     rightButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryRight = getCategoryRightForBlock(currentBlock);
+        console.log(`Right Button Pressed - Stimulus: ${stimulus}, Category: ${categoryRight}`);
         recordResponse(isCorrectResponse(categoryRight, stimulus));
     });
 
@@ -259,9 +260,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const stimulus = stimulusDiv.innerText;
         if (event.key === 'ArrowLeft') {
             const categoryLeft = getCategoryLeftForBlock(currentBlock);
+            console.log(`ArrowLeft Key Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft}`);
             recordResponse(isCorrectResponse(categoryLeft, stimulus));
         } else if (event.key === 'ArrowRight') {
             const categoryRight = getCategoryRightForBlock(currentBlock);
+            console.log(`ArrowRight Key Pressed - Stimulus: ${stimulus}, Category: ${categoryRight}`);
             recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
     });
