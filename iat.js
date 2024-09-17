@@ -41,30 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
- function sendScoreToGoogleForms(scoreD) {
-    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse'; // Sostituisci con l'ID del tuo modulo Google Form
-    const formData = new URLSearchParams();
-    
-    // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
-    formData.append('YPqjbf', scoreD); 
-
-    console.log('Sending data:', formData.toString());
-
-    fetch(formUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString(),
-    })
-    .then(response => {
-        console.log('Response Status:', response.status);
-        return response.text();
-    })
-    .then(result => console.log('Success:', result))
-    .catch(error => console.error('Error:', error));
-}
-
     function generateStimuliForBlock(block) {
         stimulusList = [];
         blockStimuliCount = 0;
@@ -248,6 +224,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const avg = average(arr);
         return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
     }
+
+    function sendDataToGoogleForms(punteggioD, nome = "", cognome = "") {
+    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse"; // Sostituisci con il tuo Google Form ID
+    
+    const formData = new FormData();
+    
+    // Aggiungi i dati ai rispettivi ID del modulo
+    formData.append("entry.647646594", nome);       // Sostituisci con l'ID corretto per "Nome"
+    formData.append("entry.897705250", cognome);    // Sostituisci con l'ID corretto per "Cognome"
+    formData.append("entry.1931265886", punteggioD); // Sostituisci con l'ID corretto per "Punteggio D"
+
+    // Invia i dati tramite fetch
+    fetch(formURL, {
+        method: "POST",
+        body: formData,
+        mode: "no-cors"  // Necessario per evitare problemi di CORS
+    })
+    .then(() => {
+        console.log("Dati inviati con successo!");
+    })
+    .catch((error) => {
+        console.error("Errore durante l'invio dei dati: ", error);
+    });
+}
 
     function isCorrectResponse(category, stimulus) {
         console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
