@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
-    let familiarizationStimuliCount = 0; // Track the number of familiarization stimuli shown in the current block
+    let familiarizationStimuliCount = 0; // Track the number of familiarization stimuli
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -57,34 +57,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 3:
+                // Blocco 3: 20 stimoli per "Io", 20 per "Non Io", 20 per "Vergogna" e 20 per "Ansia"
+                stimulusList = [
+                    ...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
             case 5:
-                // Blocchi 3 e 5: 20 stimoli di familiarizzazione e 40 stimoli test
-                const familiarizationSelf = Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
-                const familiarizationOther = Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
-                const testSelf = Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
-                const testOther = Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
-                const testShame = Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
-                const testAnxiety = Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
-
-                if (block === 3) {
-                    stimulusList = [
-                        ...familiarizationSelf,
-                        ...familiarizationOther,
-                        ...testSelf,
-                        ...testOther,
-                        ...testShame,
-                        ...testAnxiety
-                    ];
-                } else if (block === 5) {
-                    stimulusList = [
-                        ...familiarizationOther,
-                        ...familiarizationSelf,
-                        ...testOther,
-                        ...testShame,
-                        ...testSelf,
-                        ...testAnxiety
-                    ];
-                }
+                // Blocco 5: 20 stimoli per "Non Io" e "Vergogna" e 20 per "Io" e "Ansia"
+                stimulusList = [
+                    ...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
                 break;
         }
         shuffleArray(stimulusList);
@@ -98,23 +86,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 60) { // Ensure 60 stimuli per block
+        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
             if (currentStimulusIndex < stimulusList.length) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
                 categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
                 categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-
-                // Decide if the stimulus is a familiarization stimulus or test stimulus
-                if (familiarizationStimuliCount < 20) {
-                    familiarizationStimuliCount++;
-                    startTime = null; // No need to measure reaction time for familiarization stimuli
-                } else {
-                    startTime = new Date().getTime();
-                    blockStimuliCount++;
-                }
-
+                startTime = new Date().getTime();
+                blockStimuliCount++;
                 currentStimulusIndex++;
+                if (currentBlock === 1 || currentBlock === 4) {
+                    familiarizationStimuliCount++;
+                }
             } else {
                 nextBlock();
             }
@@ -233,11 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCorrectResponse(category, stimulus) {
-        // Controlla solo gli stimoli di test, ignorando quelli di familiarizzazione
-        if (familiarizationStimuliCount < 20) {
-            return true; // Stimoli di familiarizzazione, non valutiamo la risposta
-        }
-
         switch (category) {
             case 'Io':
                 return stimuliSelf.includes(stimulus);
@@ -246,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'Vergogna':
                 return stimuliShame.includes(stimulus);
             case 'Ansia':
-                returnstimuliAnxiety.includes(stimulus);
+                return stimuliAnxiety.includes(stimulus);
             case 'Io e Vergogna':
                 return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Non Io e Ansia':
