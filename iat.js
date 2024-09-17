@@ -42,8 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         switch (block) {
             case 1:
-            case 4:
-                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
+                // Blocco 1: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
@@ -207,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const D = ((avgRT_Io_Vergogna - avgRT_NonIo_Vergogna) - (avgRT_Io_Ansia - avgRT_NonIo_Ansia)) / sd;
 
-        resultsDiv.innerHTML = `
+        reactionTimesDisplay.innerHTML = `
             <h2>Risultati</h2>
             <p>Media tempi di reazione per 'Io' e 'Vergogna': ${avgRT_Io_Vergogna} ms</p>
             <p>Media tempi di reazione per 'Non Io' e 'Vergogna': ${avgRT_NonIo_Vergogna} ms</p>
