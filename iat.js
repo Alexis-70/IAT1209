@@ -27,12 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const leftButton = document.getElementById('left-button');
     const rightButton = document.getElementById('right-button');
 
-    function startIAT() {
-        document.getElementById('instructions').classList.add('hidden');
-        iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        showNextStimulus();
-    }
+  function startIAT() {
+    document.getElementById('instructions').classList.add('hidden');
+    iatContainer.classList.remove('hidden');
+    currentBlock = 1; // Ensure starting with Block 1 or whichever is appropriate
+    generateStimuliForBlock(currentBlock);
+    showNextStimulus();
+}
 
     function generateStimuliForBlock(block) {
     stimulusList = [];
@@ -187,15 +188,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function showBlockInfo() {
-        iatContainer.classList.add('hidden');
-        const blockMessage = Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.;
-        alert(blockMessage);
-        iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
-        showNextStimulus();
-    }
+   function showBlockInfo() {
+    iatContainer.classList.add('hidden');
+    const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare. Gli stimoli sono divisi tra familiarizzazione e test.`;
+    alert(blockMessage);
+    iatContainer.classList.remove('hidden');
+    generateStimuliForBlock(currentBlock);
+    currentStimulusIndex = 0; // Reset the index for the new block
+    showNextStimulus();
+}
 
     function endTest() {
         iatContainer.classList.add('hidden');
