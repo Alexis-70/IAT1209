@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
-    const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
-    const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso'];
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi'];
+    const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto'];
+    const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia'];
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'NonIo_Ansia': []
     };
     let stimulusList = [];
-    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
+    let blockStimuliCount = 0;
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -36,26 +36,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateStimuliForBlock(block) {
         stimulusList = [];
-        blockStimuliCount = 0; // Reset stimuli count for the new block
+        blockStimuliCount = 0;
 
         switch (block) {
             case 1:
             case 4:
-                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
                 ];
                 break;
             case 2:
-                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
-                // Blocco 3: 20 stimoli per "Io", 20 per "Non Io", 20 per "Vergogna" e 20 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
@@ -64,12 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 5:
-                // Blocco 5: 20 stimoli per "Non Io" e "Vergogna" e 20 per "Io" e "Ansia"
                 stimulusList = [
-                    ...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
         }
@@ -84,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+        if (blockStimuliCount < 20) {
             if (currentStimulusIndex < stimulusList.length) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
@@ -110,9 +106,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Io e Vergogna';
             case 4:
-                return 'Non Io'; // Blocco 4
+                return 'Non Io';
             case 5:
-                return 'Non Io e Vergogna'; // Blocco 5
+                return 'Non Io e Vergogna';
             default:
                 return '';
         }
@@ -127,21 +123,21 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 return 'Non Io e Ansia';
             case 4:
-                return 'Io'; // Blocco 4
+                return 'Io';
             case 5:
-                return 'Io e Ansia'; // Blocco 5
+                return 'Io e Ansia';
             default:
                 return '';
         }
     }
 
     function recordResponse(isCorrect) {
+        console.log(`Recording Response - Correct: ${isCorrect}`);
         if (isCorrect) {
             errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
 
-            // Record reaction times based on current block
             switch (currentBlock) {
                 case 1:
                     reactionTimes['Io_Vergogna'].push(reactionTime);
@@ -178,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0; // Reset the index for the new block
+        currentStimulusIndex = 0;
         showNextStimulus();
     }
 
@@ -186,17 +182,14 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
 
-        // Calculate average reaction times for each condition
         const avgRT_Io_Vergogna = average(reactionTimes['Io_Vergogna']);
         const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
         const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
 
-        // Calculate the D-score
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
 
-        // Display results
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
     }
 
@@ -210,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCorrectResponse(category, stimulus) {
-        console.log(`Stimulus: ${stimulus}, Category: ${category}`);
+        console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
         switch (category) {
             case 'Io':
                 return stimuliSelf.includes(stimulus);
@@ -233,14 +226,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Event listener for start button
     startButton.addEventListener('click', function () {
         startIAT();
         startButton.classList.add('hidden');
-        document.getElementById('touch-buttons').classList.remove('hidden'); // Show touch buttons
+        document.getElementById('touch-buttons').classList.remove('hidden');
     });
 
-    // Event listeners for touch buttons
     leftButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryLeft = getCategoryLeftForBlock(currentBlock);
@@ -255,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
         recordResponse(isCorrectResponse(categoryRight, stimulus));
     });
 
-    // For desktop compatibility, use arrow keys for responses
     document.addEventListener('keydown', function (event) {
         const stimulus = stimulusDiv.innerText;
         if (event.key === 'ArrowLeft') {
