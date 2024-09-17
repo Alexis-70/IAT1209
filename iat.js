@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function () {
             case 3:
                 // Blocco 3: 20 stimoli per "Io", 20 per "Non Io", 20 per "Vergogna" e 20 per "Ansia"
                 stimulusList = [
-                    ...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 5:
@@ -95,9 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 startTime = new Date().getTime();
                 blockStimuliCount++;
                 currentStimulusIndex++;
-                if (currentBlock === 1 || currentBlock === 4) {
-                    familiarizationStimuliCount++;
-                }
             } else {
                 nextBlock();
             }
@@ -141,32 +138,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function recordResponse(isCorrect) {
-        if (startTime !== null && blockStimuliCount > 20) { // Solo stimoli di test
-            if (isCorrect) {
-                errorMessage.classList.add('hidden');
-                endTime = new Date().getTime();
-                const reactionTime = endTime - startTime;
+        if (isCorrect) {
+            errorMessage.classList.add('hidden');
+            endTime = new Date().getTime();
+            const reactionTime = endTime - startTime;
 
-                // Record reaction times based on current block
-                switch (currentBlock) {
-                    case 1:
-                        reactionTimes['Io_Vergogna'].push(reactionTime);
-                        break;
-                    case 2:
-                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                        break;
-                    case 3:
-                        reactionTimes['Io_Ansia'].push(reactionTime);
-                        break;
-                    case 4:
-                        reactionTimes['NonIo_Ansia'].push(reactionTime);
-                        break;
-                }
-            } else {
-                errorMessage.classList.remove('hidden');
+            // Record reaction times based on current block
+            switch (currentBlock) {
+                case 1:
+                    reactionTimes['Io_Vergogna'].push(reactionTime);
+                    break;
+                case 2:
+                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                    break;
+                case 3:
+                    reactionTimes['Io_Ansia'].push(reactionTime);
+                    break;
+                case 4:
+                    reactionTimes['NonIo_Ansia'].push(reactionTime);
+                    break;
             }
+
+            showNextStimulus();
+        } else {
+            errorMessage.classList.remove('hidden');
         }
-        showNextStimulus();
     }
 
     function nextBlock() {
