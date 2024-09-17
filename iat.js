@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function recordResponse(isCorrect) {
-        if (startTime !== null) { // Only record response time if it's a test stimulus
+        if (startTime !== null && blockStimuliCount > 20) { // Solo stimoli di test
             if (isCorrect) {
                 errorMessage.classList.add('hidden');
                 endTime = new Date().getTime();
@@ -233,6 +233,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCorrectResponse(category, stimulus) {
+        // Controlla solo gli stimoli di test, ignorando quelli di familiarizzazione
+        if (familiarizationStimuliCount < 20) {
+            return true; // Stimoli di familiarizzazione, non valutiamo la risposta
+        }
+
         switch (category) {
             case 'Io':
                 return stimuliSelf.includes(stimulus);
@@ -241,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'Vergogna':
                 return stimuliShame.includes(stimulus);
             case 'Ansia':
-                return stimuliAnxiety.includes(stimulus);
+                returnstimuliAnxiety.includes(stimulus);
             case 'Io e Vergogna':
                 return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
             case 'Non Io e Ansia':
@@ -286,5 +291,4 @@ document.addEventListener('DOMContentLoaded', function () {
             recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
     });
-
 });
