@@ -192,6 +192,24 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
         const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
+         // Aggiungi spiegazione delle categorie per ogni blocco
+    switch (currentBlock) {
+        case 1:
+            blockMessage += `\nIn questo blocco, premi il tasto sinistro per associare la parola a "Io" e il tasto destro per associare la parola a "Non Io".`;
+            break;
+        case 2:
+            blockMessage += `\nIn questo blocco, premi il tasto sinistro per associare la parola a "Vergogna" e il tasto destro per associare la parola a "Ansia".`;
+            break;
+        case 3:
+            blockMessage += `\nIn questo blocco, premi il tasto sinistro per associare la parola a "Io" o "Vergogna" e il tasto destro per associare la parola a "Non Io" o "Ansia".`;
+            break;
+        case 4:
+            blockMessage += `\nIn questo blocco, premi il tasto sinistro per associare la parola a "Non Io" e il tasto destro per associare la parola a "Io".`;
+            break;
+        case 5:
+            blockMessage += `\nIn questo blocco, premi il tasto sinistro per associare la parola a "Non Io" o "Vergogna" e il tasto destro per associare la parola a "Io" o "Ansia".`;
+            break;
+    }
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
