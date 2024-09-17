@@ -200,38 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-      function showBlockInstructions() {
-        const instructionsText = getBlockInstructions(currentBlock);
-        const blockInstructionsDiv = document.getElementById('block-instructions');
-        blockInstructionsDiv.innerText = instructionsText;
-        blockInstructionsDiv.classList.remove('hidden');
-
-        // Mostra il messaggio e avvia il blocco dopo un ritardo
-        setTimeout(() => {
-            blockInstructionsDiv.classList.add('hidden');
-            iatContainer.classList.remove('hidden');
-            generateStimuliForBlock(currentBlock);
-            showNextStimulus();
-        }, 5000); // Mostra il messaggio per 5 secondi
-    }
-
-    function getBlockInstructions(block) {
-        switch (block) {
-            case 1:
-                return 'In questo blocco, premi il tasto sinistro per "Io" e il tasto destro per "Non Io".';
-            case 2:
-                return 'In questo blocco, premi il tasto sinistro per "Vergogna" e il tasto destro per "Ansia".';
-            case 3:
-                return 'In questo blocco, premi il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia".';
-            case 4:
-                return 'In questo blocco, premi il tasto sinistro per "Non Io" e il tasto destro per "Io".';
-            case 5:
-                return 'In questo blocco, premi il tasto sinistro per "Non Io" o "Vergogna" e il tasto destro per "Io" o "Ansia".';
-            default:
-                return '';
-        }
-    }
-
     function nextBlock() {
         currentBlock++;
         if (currentBlock > 5) {
