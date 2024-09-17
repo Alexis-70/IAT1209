@@ -41,6 +41,23 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
+  function sendScoreToGoogleForms(scoreD) {
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/viewform?usp=sf_link'; // Sostituisci con l'ID del tuo modulo Google Form
+    const formData = new URLSearchParams();
+    
+    // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
+    formData.append('i.err.1166678465', scoreD); 
+
+    fetch(formUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => console.log('Success:', result))
+    .catch(error => console.error('Error:', error));
+}
+
+
     function generateStimuliForBlock(block) {
         stimulusList = [];
         blockStimuliCount = 0;
@@ -212,6 +229,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
+         // Invia il punteggio D al Google Form
+    sendScoreToGoogleForms(D.toFixed(2));
     }
 
     function average(arr) {
