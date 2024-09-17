@@ -48,23 +48,22 @@ document.addEventListener('DOMContentLoaded', function () {
     // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
     formData.append('i.err.1166678465', scoreD); 
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', formUrl, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            console.log('Success:', xhr.responseText);
-        } else {
-            console.error('Error:', xhr.statusText);
-        }
-    };
-    xhr.onerror = function () {
-        console.error('Request failed');
-    };
-    xhr.send(formData.toString());
+    console.log('Sending data:', formData.toString());
+
+    fetch(formUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+    })
+    .then(response => {
+        console.log('Response Status:', response.status);
+        return response.text();
+    })
+    .then(result => console.log('Success:', result))
+    .catch(error => console.error('Error:', error));
 }
-
-
 
     function generateStimuliForBlock(block) {
         stimulusList = [];
