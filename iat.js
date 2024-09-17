@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto'];
     const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia'];
 
+    // Per familiarizzazione
+    const familiarizationSelf = [...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)])];
+    const familiarizationOther = [...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])];
+    const familiarizationShame = [...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)])];
+    const familiarizationAnxiety = [...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])];
+
     let currentStimulusIndex = 0;
     let currentBlock = 1;
     let startTime, endTime;
@@ -14,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'NonIo_Ansia': []
     };
     let stimulusList = [];
-    let blockStimuliCount = 0;
+    let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -41,19 +47,24 @@ document.addEventListener('DOMContentLoaded', function () {
         switch (block) {
             case 1:
             case 4:
+                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
                 ];
                 break;
             case 2:
+                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
                 stimulusList = [
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
             case 3:
+                // Blocco 3: 20 stimoli di familiarizzazione + 20 stimoli per il test
                 stimulusList = [
+                    ...familiarizationSelf,
+                    ...familiarizationOther,
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
@@ -61,7 +72,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 break;
             case 5:
+                // Blocco 5: 20 stimoli di familiarizzazione + 20 stimoli per il test
                 stimulusList = [
+                    ...familiarizationOther,
+                    ...familiarizationShame,
                     ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
                     ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
                     ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
@@ -80,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 20) {
+        if (blockStimuliCount < 20 || currentStimulusIndex < stimulusList.length) { // Ensure correct number of stimuli per block
             if (currentStimulusIndex < stimulusList.length) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
@@ -132,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function recordResponse(isCorrect) {
-        console.log(`Recording Response - Correct: ${isCorrect}`);
         if (isCorrect) {
             errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
