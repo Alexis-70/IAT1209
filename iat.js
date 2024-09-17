@@ -67,13 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-            case 4:
-                // Blocco 4: "Io" a destra e "Non Io" a sinistra
-                stimulusList = [
-                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-                ];
-                break;
             case 5:
                 // Blocco 5: Prima 20 stimoli (5 Vergogna, 5 Ansia, 5 Io, 5 Non Io), poi 10 stimoli per ciascuna categoria
                 stimulusList = [
@@ -114,8 +107,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showNextStimulus() {
-        if (blockStimuliCount < 20 || currentBlock !== 3 && currentBlock !== 5) {
-            if (currentStimulusIndex < stimulusList.length) {
+        if (currentStimulusIndex < stimulusList.length) {
+            if (blockStimuliCount < 20 || (currentBlock === 3 || currentBlock === 5 && blockStimuliCount < 60)) {
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
                 categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
@@ -210,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('block-info').classList.add('hidden');
             iatContainer.classList.remove('hidden');
             generateStimuliForBlock(currentBlock);
+            currentStimulusIndex = 0; // Reset the index for the new block
             showNextStimulus();
         }, 2000);
     }
@@ -226,6 +220,38 @@ document.addEventListener('DOMContentLoaded', function () {
             return `<p>${key}: ${average} ms</p>`;
         }).join('');
         reactionTimesDisplay.innerHTML = results;
+    }
+
+    function average(arr) {
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+    }
+
+    function standardDeviation(arr) {
+        const avg = average(arr);
+        return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
+    }
+
+    function isCorrectResponse(category, stimulus) {
+        switch (category) {
+            case 'Io':
+                return stimuliSelf.includes(stimulus);
+            case 'Non Io':
+                return stimuliOther.includes(stimulus);
+            case 'Vergogna':
+                return stimuliShame.includes(stimulus);
+            case 'Ansia':
+                return stimuliAnxiety.includes(stimulus);
+            case 'Io e Vergogna':
+                return stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus);
+            case 'Non Io e Ansia':
+                return stimuliOther.includes(stimulus) || stimuliAnxiety.includes(stimulus);
+            case 'Non Io e Vergogna':
+                return stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus);
+            case 'Io e Ansia':
+                return stimuliSelf.includes(stimulus) || stimuliAnxiety.includes(stimulus);
+            default:
+                return false;
+        }
     }
 
     startButton.addEventListener('click', startIAT);
