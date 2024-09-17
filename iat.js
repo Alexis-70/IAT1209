@@ -8,10 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let stimulusList = [];
     let currentStimulusIndex = 0;
     let currentBlock = 1;
-    let blockStimuliCount = 0;
+    let isPracticePhase = false;
     let startTime;
     let endTime;
-    let isPracticePhase = false;
     let reactionTimes = {
         'Io_Vergogna': [],
         'NonIo_Vergogna': [],
@@ -67,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateStimuliForBlock(block) {
         stimulusList = [];
-        blockStimuliCount = 0; // Reset stimuli count for the new block
 
         switch (block) {
             case 1:
@@ -89,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 stimulusList = [
                     ...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
                     ...Array(20).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(20).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(20).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
         }
@@ -99,26 +97,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showNextStimulus() {
         if (currentStimulusIndex < stimulusList.length) {
-            if (blockStimuliCount < 60) { // Assicurati 60 stimoli per blocco
-                if (isPracticePhase) {
-                    if (blockStimuliCount >= 20) {
-                        isPracticePhase = false; // Passa alla fase di test effettivo
+            if (currentBlock === 3 || currentBlock === 5) {
+                if (currentStimulusIndex === 20) { // Prima fase di pratica
+                    isPracticePhase = false; // Passa alla fase di test effettivo
+                }
+                if (currentStimulusIndex < 20 || !isPracticePhase) { // Se non è nella fase di pratica
+                    if (!isPracticePhase) {
                         startTime = new Date().getTime(); // Inizia a misurare i tempi
                     }
+                    errorMessage.classList.add('hidden');
+                    stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+                    categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
+                    categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
+                    currentStimulusIndex++;
                 } else {
-                    startTime = new Date().getTime();
+                    currentStimulusIndex++;
                 }
-
+            } else {
+                startTime = new Date().getTime(); // Inizia a misurare i tempi
                 errorMessage.classList.add('hidden');
                 stimulusDiv.innerText = stimulusList[currentStimulusIndex];
                 categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
                 categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-
-                blockStimuliCount++;
                 currentStimulusIndex++;
-            }
-            else {
-                nextBlock();
             }
         } else {
             nextBlock();
@@ -169,7 +170,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
-        isPracticePhase = (currentBlock === 3 || currentBlock === 5); // Imposta la fase di pratica per i blocchi 3 e 5
         generateStimuliForBlock(currentBlock);
         currentStimulusIndex = 0; // Reset the index for the new block
         showNextStimulus();
@@ -229,5 +229,4 @@ document.addEventListener('DOMContentLoaded', function () {
             recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
     });
-
 });
