@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Definizione degli stimoli
-    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso'];
-    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi'];
-    const stimuliShame = ['Arrossamento', 'Imbarazzo', 'Vergogna', 'Vergognoso/a'];
-    const stimuliAnxiety = ['Ansioso/a', 'Tachicardia', 'Paura', 'Incertezza'];
+    const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso']; // Stimolo associato a "Io"
+    const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi']; // Stimolo associato a "Non Io"
+    const stimuliShame = ['Imbarazzo', 'Arrossamento', 'Fallimento', 'Rifiuto']; // Stimoli associati a "Vergogna"
+    const stimuliAnxiety = ['Tensione', 'Nervi a fior di pelle', 'Tachicardia']; // Stimoli associati a "Ansia"
 
     let currentStimulusIndex = 0;
     let currentBlock = 1;
@@ -36,47 +35,53 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateStimuliForBlock(block) {
-    stimulusList = [];
-    blockStimuliCount = 0; // Reset stimuli count for the new block
+        stimulusList = [];
+        blockStimuliCount = 0; // Reset stimuli count for the new block
 
-    switch (block) {
-        case 1:
-        case 4:
-            // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
-            stimulusList = [
-                ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
-            ];
-            break;
-        case 2:
-            // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
-            stimulusList = [
-                ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-            ];
-            break;
-        case 3:
-            // Blocco 3: 20 stimoli per "Io", 20 per "Non Io", 10 per "Vergogna" e 10 per "Ansia" (Totale: 60 stimoli)
-            stimulusList = [
-                ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-            ];
-            break;
-        case 5:
-            // Blocco 5: 15 stimoli per "Non Io", 15 per "Vergogna", 15 per "Io", 15 per "Ansia" (Totale: 60 stimoli)
-            stimulusList = [
-                ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-            ];
-            break;
+        switch (block) {
+            case 1:
+            case 4:
+                // Blocchi 1 e 4: 10 stimoli per "Io" e 10 per "Non Io"
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
+                ];
+                break;
+            case 2:
+                // Blocco 2: 10 stimoli per "Vergogna" e 10 per "Ansia"
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 3:
+                // Blocco 3: 10 stimoli per "Io", 10 per "Non Io", 10 per "Vergogna" e 10 per "Ansia"
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+            case 4:
+                // Blocco 4: "Io" a destra e "Non Io" a sinistra
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)])
+                ];
+                break;
+            case 5:
+                // Blocco 5: "Non Io" e "Vergogna" a sinistra, "Io" e "Ansia" a destra
+                stimulusList = [
+                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+                break;
+        }
+        shuffleArray(stimulusList);
     }
-    shuffleArray(stimulusList);
-}
-
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -85,29 +90,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-   function showNextStimulus() {
-    if (blockStimuliCount < (currentBlock === 3 || currentBlock === 5 ? 60 : 20)) { // Blocchi 3 e 5 hanno 60 stimoli
-        if (currentStimulusIndex < stimulusList.length) {
-            errorMessage.classList.add('hidden');
-            stimulusDiv.innerText = stimulusList[currentStimulusIndex];
-            categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
-            categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
-
-            if (blockStimuliCount >= 20 || (currentBlock !== 3 && currentBlock !== 5)) {
-                // Misura il tempo solo per le prove dopo le prime 20 nei blocchi 3 e 5
+    function showNextStimulus() {
+        if (blockStimuliCount < 20) { // Ensure 20 stimuli per block
+            if (currentStimulusIndex < stimulusList.length) {
+                errorMessage.classList.add('hidden');
+                stimulusDiv.innerText = stimulusList[currentStimulusIndex];
+                categoryLeftDiv.innerText = getCategoryLeftForBlock(currentBlock);
+                categoryRightDiv.innerText = getCategoryRightForBlock(currentBlock);
                 startTime = new Date().getTime();
+                blockStimuliCount++;
+                currentStimulusIndex++;
+            } else {
+                nextBlock();
             }
-            
-            blockStimuliCount++;
-            currentStimulusIndex++;
         } else {
             nextBlock();
         }
-    } else {
-        nextBlock();
     }
-}
-
 
     function getCategoryLeftForBlock(block) {
         switch (block) {
@@ -143,12 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-   function recordResponse(isCorrect) {
-    if (isCorrect) {
-        errorMessage.classList.add('hidden');
-
-        if (blockStimuliCount > 20 || (currentBlock !== 3 && currentBlock !== 5)) {
-            // Registra il tempo di reazione solo dopo le prime 20 prove nei blocchi 3 e 5
+    function recordResponse(isCorrect) {
+        if (isCorrect) {
+            errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
 
@@ -166,18 +162,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 4:
                     reactionTimes['NonIo_Ansia'].push(reactionTime);
                     break;
-                case 5:
-                    reactionTimes['NonIo_Ansia'].push(reactionTime);
-                    break;
             }
+
+            showNextStimulus();
+        } else {
+            errorMessage.classList.remove('hidden');
         }
-
-        showNextStimulus();
-    } else {
-        errorMessage.classList.remove('hidden');
     }
-}
-
 
     function nextBlock() {
         currentBlock++;
@@ -281,3 +272,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
