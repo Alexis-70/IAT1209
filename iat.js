@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formData = new URLSearchParams();
     
     // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
-    formData.append('i.err.1166678465', scoreD); 
+    formData.append('YPqjbf', scoreD); 
 
     console.log('Sending data:', formData.toString());
 
