@@ -212,20 +212,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
-         // Invia il punteggio D al Google Form
-    sendScoreToGoogleForms(D.toFixed(2));
-    }
-
-    function average(arr) {
-        return arr.reduce((a, b) => a + b, 0) / arr.length;
-    }
-
-    function standardDeviation(arr) {
-        const avg = average(arr);
-        return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
-    }
-
-    function sendDataToGoogleForms(punteggioD, nome = "", cognome = "") {
+     // Funzione per inviare i dati a Google Forms
+function sendDataToGoogleForms(punteggioD, nome, cognome) {
     const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse"; // Sostituisci con il tuo Google Form ID
     
     const formData = new FormData();
@@ -248,6 +236,21 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error("Errore durante l'invio dei dati: ", error);
     });
 }
+
+// Ora inserisci nome, cognome e invia il punteggio D
+const nome = prompt("Inserisci il tuo nome:");
+const cognome = prompt("Inserisci il tuo cognome:");
+sendDataToGoogleForms(D, nome, cognome);
+
+
+    function average(arr) {
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+    }
+
+    function standardDeviation(arr) {
+        const avg = average(arr);
+        return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
+    }
 
     function isCorrectResponse(category, stimulus) {
         console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
