@@ -58,15 +58,46 @@
         .touch-button:active {
             background-color: #0056b3;
         }
+        #user-info {
+            margin-top: 50px;
+        }
+        #user-info input {
+            font-size: 18px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #user-info button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #user-info button:active {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <h1>Shame IAT Test</h1>
-    <div id="instructions">
+
+    <!-- Modulo per nome e cognome -->
+    <div id="user-info">
+        <h2>Inserisci i tuoi dati</h2>
+        <input type="text" id="user-name" placeholder="Nome" required>
+        <input type="text" id="user-surname" placeholder="Cognome" required>
+        <button id="submit-user-info">Invia</button>
+    </div>
+
+    <div id="instructions" class="hidden">
         <p>Premi il pulsante "Inizia" per avviare il test. Usa il tasto sinistro per "Io" o "Vergogna" e il tasto destro per "Non Io" o "Ansia" su desktop. Su dispositivi mobili, tocca i pulsanti laterali.</p>
     </div>
 
-    <div id="start-container">
+    <div id="start-container" class="hidden">
         <button id="start-button">Inizia Test</button>
     </div>
 
@@ -89,5 +120,33 @@
     </div>
 
     <script src="iat.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const submitUserInfoButton = document.getElementById('submit-user-info');
+            const userInfoDiv = document.getElementById('user-info');
+            const instructionsDiv = document.getElementById('instructions');
+            const startContainer = document.getElementById('start-container');
+            const startButton = document.getElementById('start-button');
+            const userNameInput = document.getElementById('user-name');
+            const userSurnameInput = document.getElementById('user-surname');
+
+            submitUserInfoButton.addEventListener('click', function () {
+                const userName = userNameInput.value.trim();
+                const userSurname = userSurnameInput.value.trim();
+
+                if (userName && userSurname) {
+                    // Passa i dati al JavaScript del test
+                    window.userName = userName;
+                    window.userSurname = userSurname;
+
+                    userInfoDiv.classList.add('hidden');
+                    instructionsDiv.classList.remove('hidden');
+                    startContainer.classList.remove('hidden');
+                } else {
+                    alert('Per favore, inserisci sia il nome che il cognome.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
