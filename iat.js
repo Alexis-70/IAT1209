@@ -41,21 +41,29 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-  function sendScoreToGoogleForms(scoreD) {
+ function sendScoreToGoogleForms(scoreD) {
     const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSesrwj5N4j8UTEs1qHbUd3J4Icfufi9_zPnPk8pUJtBipzB_Q/formResponse'; // Sostituisci con l'ID del tuo modulo Google Form
     const formData = new URLSearchParams();
     
     // Sostituisci 'entry.123456789' con l'ID del campo nel tuo modulo Google Form
     formData.append('i.err.1166678465', scoreD); 
 
-    fetch(formUrl, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(result => console.log('Success:', result))
-    .catch(error => console.error('Error:', error));
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', formUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log('Success:', xhr.responseText);
+        } else {
+            console.error('Error:', xhr.statusText);
+        }
+    };
+    xhr.onerror = function () {
+        console.error('Request failed');
+    };
+    xhr.send(formData.toString());
 }
+
 
 
     function generateStimuliForBlock(block) {
