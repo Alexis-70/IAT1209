@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function startIAT() {
         document.getElementById('instructions').classList.add('hidden');
         iatContainer.classList.remove('hidden');
+        startButton.classList.add('hidden'); // Nasconde il pulsante Start durante il test
+        leftButton.classList.remove('hidden'); // Mostra i pulsanti di risposta
+        rightButton.classList.remove('hidden'); // Mostra i pulsanti di risposta
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
     }
@@ -134,30 +137,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function recordResponse(isCorrect) {
-        if (isCorrect) {
-            errorMessage.classList.add('hidden');
-            endTime = new Date().getTime();
-            const reactionTime = endTime - startTime;
-
-            switch (currentBlock) {
-                case 1:
-                    reactionTimes['Io_Vergogna'].push(reactionTime);
-                    break;
-                case 2:
-                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                    break;
-                case 3:
-                    reactionTimes['Io_Ansia'].push(reactionTime);
-                    break;
-                case 4:
-                    reactionTimes['NonIo_Ansia'].push(reactionTime);
-                    break;
+    function recordResponse(isLeftButton) {
+        if (isLeftButton) {
+            const stimulus = stimulusDiv.innerText;
+            const categoryLeft = getCategoryLeftForBlock(currentBlock);
+            if (isCorrectResponse(categoryLeft, stimulus)) {
+                endTime = new Date().getTime();
+                const reactionTime = endTime - startTime;
+                // Record reaction times based on current block
+                switch (currentBlock) {
+                    case 1:
+                        reactionTimes['Io_Vergogna'].push(reactionTime);
+                        break;
+                    case 2:
+                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                        break;
+                    case 3:
+                        reactionTimes['Io_Ansia'].push(reactionTime);
+                        break;
+                    case 4:
+                        reactionTimes['NonIo_Ansia'].push(reactionTime);
+                        break;
+                }
+                showNextStimulus();
+            } else {
+                errorMessage.classList.remove('hidden');
             }
-
-            showNextStimulus();
         } else {
-            errorMessage.classList.remove('hidden');
+            const stimulus = stimulusDiv.innerText;
+            const categoryRight = getCategoryRightForBlock(currentBlock);
+            if (isCorrectResponse(categoryRight, stimulus)) {
+                endTime = new Date().getTime();
+                const reactionTime = endTime - startTime;
+                // Record reaction times based on current block
+                switch (currentBlock) {
+                    case 1:
+                        reactionTimes['Io_Vergogna'].push(reactionTime);
+                        break;
+                    case 2:
+                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                        break;
+                    case 3:
+                        reactionTimes['Io_Ansia'].push(reactionTime);
+                        break;
+                    case 4:
+                        reactionTimes['NonIo_Ansia'].push(reactionTime);
+                        break;
+                }
+                showNextStimulus();
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
         }
     }
 
@@ -184,34 +214,60 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
 
+        // Calculate average reaction times for each condition
         const avgRT_Io_Vergogna = average(reactionTimes['Io_Vergogna']);
         const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
         const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
 
-        const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
-        const dScore = ((avgRT_Io_Vergogna - avgRT_NonIo_Vergogna) - (avgRT_Io_Ansia - avgRT_NonIo_Ansia)) / sd;
+        // Calculate the D score
+        const dScore = calculateDScore(avgRT_Io_Vergogna, avgRT_NonIo_Vergogna, avgRT_Io_Ansia, avgRT_NonIo_Ansia);
 
         resultsDiv.innerHTML = `
-            <h2>Risultati</h2>
-            <p>Tempo medio di reazione - Io e Vergogna: ${avgRT_Io_Vergogna} ms</p>
-            <p>Tempo medio di reazione - Non Io e Vergogna: ${avgRT_NonIo_Vergogna} ms</p>
-            <p>Tempo medio di reazione - Io e Ansia: ${avgRT_Io_Ansia} ms</p>
-            <p>Tempo medio di reazione - Non Io e Ansia: ${avgRT_NonIo_Ansia} ms</p>
-            <p>Punteggio D: ${dScore.toFixed(2)}</p>
+            <p>Tempo medio di reazione per "Io" e "Vergogna": ${avgRT_Io_Vergogna} ms</p>
+            <p>Tempo medio di reazione per "Non Io" e "Vergogna": ${avgRT_NonIo_Vergogna} ms</p>
+            <p>Tempo medio di reazione per "Io" e "Ansia": ${avgRT_Io_Ansia} ms</p>
+            <p>Tempo medio di reazione per "Non Io" e "Ansia": ${avgRT_NonIo_Ansia} ms</p>
+            <p>Punteggio D: ${dScore}</p>
         `;
     }
 
-    function average(array) {
-        return array.reduce((a, b) => a + b, 0) / array.length;
+    function isCorrectResponse(category, stimulus) {
+        if (currentBlock === 1 || currentBlock === 4) {
+            return (category === 'Io' && stimuliSelf.includes(stimulus)) ||
+                   (category === 'Non Io' && stimuliOther.includes(stimulus));
+        } else if (currentBlock === 2) {
+            return (category === 'Vergogna' && stimuliShame.includes(stimulus)) ||
+                   (category === 'Ansia' && stimuliAnxiety.includes(stimulus));
+        } else if (currentBlock === 3) {
+            return (category === 'Io e Vergogna' && stimuliSelf.includes(stimulus) || stimuliShame.includes(stimulus)) ||
+                   (category === 'Non Io e Ansia' && stimuliOther.includes(stimulus) || stimuliAnxiety.includes(stimulus));
+        } else if (currentBlock === 5) {
+            return (category === 'Non Io e Vergogna' && stimuliOther.includes(stimulus) || stimuliShame.includes(stimulus)) ||
+                   (category === 'Io e Ansia' && stimuliSelf.includes(stimulus) || stimuliAnxiety.includes(stimulus));
+        }
+        return false;
     }
 
-    function standardDeviation(array) {
-        const avg = average(array);
-        return Math.sqrt(array.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / array.length);
+    function average(arr) {
+        if (arr.length === 0) return 0;
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
     }
+
+    function calculateDScore(avgRT_Io_Vergogna, avgRT_NonIo_Vergogna, avgRT_Io_Ansia, avgRT_NonIo_Ansia) {
+        const meanRT_Vergogna = (avgRT_Io_Vergogna + avgRT_NonIo_Vergogna) / 2;
+        const meanRT_Ansia = (avgRT_Io_Ansia + avgRT_NonIo_Ansia) / 2;
+        return (meanRT_Vergogna - meanRT_Ansia) / (meanRT_Vergogna + meanRT_Ansia);
+    }
+
+    // Event listeners for the buttons
+    leftButton.addEventListener('click', function () {
+        recordResponse(true); // true = left button
+    });
+
+    rightButton.addEventListener('click', function () {
+        recordResponse(false); // false = right button
+    });
 
     startButton.addEventListener('click', startIAT);
-    leftButton.addEventListener('click', () => recordResponse(true));
-    rightButton.addEventListener('click', () => recordResponse(false));
 });
