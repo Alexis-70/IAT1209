@@ -192,22 +192,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
         const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
-
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
         currentStimulusIndex = 0;
         showNextStimulus();
-    }
-
-    function nextBlock() {
-        currentBlock++;
-        if (currentBlock > 5) {
-            endTest();
-        } else {
-            iatContainer.classList.add('hidden');
-            showBlockInstructions();
-        }
     }
 
     function endTest() {
