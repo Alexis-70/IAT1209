@@ -221,10 +221,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
+// Calcola il tasso di errore
+    const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
+    const incorrectResponses = totalResponses - (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length); // Aggiorna in base a come registri le risposte corrette
+    const errorRate = incorrectResponses / totalResponses;
+
+    // Condizioni per considerare il punteggio D come non interpretabile
+    if (
+        avgRT_Io_Vergogna < 300 || avgRT_Io_Vergogna > 3000 ||
+        avgRT_NonIo_Vergogna < 300 || avgRT_NonIo_Vergogna > 3000 ||
+        avgRT_Io_Ansia < 300 || avgRT_Io_Ansia > 3000 ||
+        avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000 ||
+        errorRate > 0.2 // Maggiore del 20%
+    ) {
+        reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
+        return;
+    }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-
-
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
 
