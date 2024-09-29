@@ -227,13 +227,14 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
     const errorRate = incorrectResponses / totalResponses;
 
     // Condizioni per considerare il punteggio D come non interpretabile
-    if (
+    const isAvgRTInvalid = (
         avgRT_Io_Vergogna < 300 || avgRT_Io_Vergogna > 3000 ||
         avgRT_NonIo_Vergogna < 300 || avgRT_NonIo_Vergogna > 3000 ||
         avgRT_Io_Ansia < 300 || avgRT_Io_Ansia > 3000 ||
-        avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000 ||
-        errorRate > 0.2 // Maggiore del 20%
-    ) {
+        avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000
+    );
+
+    if (isAvgRTInvalid || errorRate > 0.2) { // Se ci sono tempi di reazione non validi o un tasso di errore maggiore del 20%
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
         return;
     }
@@ -250,23 +251,23 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
         };
 
-        const formData = new URLSearchParams(data).toString();
-        fetch(formUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: formData
-        }).then(response => {
-            if (response.ok) {
-                console.log('Dati inviati con successo.');
-            } else {
-                console.log('Errore nell\'invio dei dati.');
-            }
-        }).catch(error => {
-            console.error('Errore:', error);
-        });
-    }
+         const formData = new URLSearchParams(data).toString();
+    fetch(formUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            console.log('Dati inviati con successo.');
+        } else {
+            console.log('Errore nell\'invio dei dati.');
+        }
+    }).catch(error => {
+        console.error('Errore:', error);
+    });
+}
     
     function average(arr) {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
