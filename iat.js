@@ -199,34 +199,27 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-function endTest() {
-    iatContainer.classList.add('hidden');
-    resultsDiv.classList.remove('hidden');
+    function endTest() {
+        iatContainer.classList.add('hidden');
+        resultsDiv.classList.remove('hidden');
 
-    const avgRT_Io_Vergogna = average(reactionTimes['Io_Vergogna']);
-    const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
-    const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
-    const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
+        const avgRT_Io_Vergogna = average(reactionTimes['Io_Vergogna']);
+        const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
+        const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
+        const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
 
-    // Calcolo delle medie compatibili e incompatibili
-    const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
-    const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
+        const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
+        const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
 
-    // Calcolo della deviazione standard complessiva
-    const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
+        reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
 
-    // Calcolo del punteggio D
-    const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-
-    reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
-
-    // Codice per inviare i dati al Google Form
-    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse';
-    const data = {
-        'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
-        'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
-        'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
-    };
+        // Codice per inviare i dati al Google Form
+        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse'; // Inserisci qui l'URL del tuo Google Form
+        const data = {
+            'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
+            'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
+            'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
+        };
 
         const formData = new URLSearchParams(data).toString();
         fetch(formUrl, {
