@@ -177,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
             showNextStimulus();
         } else {
             errorMessage.classList.remove('hidden');
-            errorCount++; // Incrementa il contatore degli errori
         }
     }
 
@@ -225,9 +224,8 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             // Calcolo del tasso di errore
-    const errorRate = (errorCount / totalResponses) * 100;
 
-reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}\nTasso di errore: ${errorRate.toFixed(2)}%`;
+reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)};
 
 
 
