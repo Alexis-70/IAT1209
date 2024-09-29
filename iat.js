@@ -198,12 +198,6 @@ document.addEventListener('DOMContentLoaded', function () {
         currentStimulusIndex = 0;
         showNextStimulus();
     }
-    // Funzione per calcolare il tasso di errore
-function calculateErrorRate() {
-    const totalResponses = Object.values(reactionTimes).reduce((sum, arr) => sum + arr.length, 0);
-    const totalErrors = totalResponses - (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length);
-    return totalResponses > 0 ? totalErrors / totalResponses : 0;
-}
 
     function endTest() {
         iatContainer.classList.add('hidden');
@@ -213,17 +207,6 @@ function calculateErrorRate() {
         const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
         const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
-          // Controllo delle condizioni per il punteggio D
-    if (
-        avgRT_Io_Vergogna < 300 || avgRT_Io_Vergogna > 3000 ||
-        avgRT_NonIo_Vergogna < 300 || avgRT_NonIo_Vergogna > 3000 ||
-        avgRT_Io_Ansia < 300 || avgRT_Io_Ansia > 3000 ||
-        avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000 ||
-        calculateErrorRate() > 0.2
-    ) {
-        resultsDiv.innerText = "Il punteggio D non è interpretabile.";
-        return; // Esci dalla funzione senza calcolare il punteggio D
-    }
          // Calcolo delle medie compatibili e incompatibili
     const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
     const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
