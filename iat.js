@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showBlockInfo() {
         iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
+        const blockMessage = Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.;
         alert(blockMessage);
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
@@ -214,24 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
     // Calcolo del punteggio D
     const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-    // Calcolo del tasso di errore
-    const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
-    const totalErrors = /* calcola il numero di errori */; // Dovresti avere un modo per contare gli errori
-    const errorRate = (totalErrors / totalResponses) * 100;
 
-    // Verifica le condizioni per l'interpretabilità
-    if (
-        avgRT_Io_Vergogna < 300 || avgRT_Io_Vergogna > 3000 ||
-        avgRT_NonIo_Vergogna < 300 || avgRT_NonIo_Vergogna > 3000 ||
-        avgRT_Io_Ansia < 300 || avgRT_Io_Ansia > 3000 ||
-        avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000 ||
-        errorRate > 20
-    ) {
-        reactionTimesDisplay.innerText = "Il punteggio D non è interpretabile.";
-    } else {
-        // Mostra i risultati se sono interpretabili
-        reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
-    }
+        reactionTimesDisplay.innerText = Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)};
 
         // Codice per inviare i dati al Google Form
         const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse'; // Inserisci qui l'URL del tuo Google Form
@@ -269,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCorrectResponse(category, stimulus) {
-        console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
+        console.log(Checking Response - Stimulus: ${stimulus}, Category: ${category});
         switch (category) {
             case 'Io':
                 return stimuliSelf.includes(stimulus);
@@ -301,14 +285,14 @@ document.addEventListener('DOMContentLoaded', function () {
     leftButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryLeft = getCategoryLeftForBlock(currentBlock);
-        console.log(`Left Button Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft}`);
+        console.log(Left Button Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft});
         recordResponse(isCorrectResponse(categoryLeft, stimulus));
     });
 
     rightButton.addEventListener('click', function () {
         const stimulus = stimulusDiv.innerText;
         const categoryRight = getCategoryRightForBlock(currentBlock);
-        console.log(`Right Button Pressed - Stimulus: ${stimulus}, Category: ${categoryRight}`);
+        console.log(Right Button Pressed - Stimulus: ${stimulus}, Category: ${categoryRight});
         recordResponse(isCorrectResponse(categoryRight, stimulus));
     });
 
@@ -316,11 +300,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const stimulus = stimulusDiv.innerText;
         if (event.key === 'ArrowLeft') {
             const categoryLeft = getCategoryLeftForBlock(currentBlock);
-            console.log(`ArrowLeft Key Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft}`);
+            console.log(ArrowLeft Key Pressed - Stimulus: ${stimulus}, Category: ${categoryLeft});
             recordResponse(isCorrectResponse(categoryLeft, stimulus));
         } else if (event.key === 'ArrowRight') {
             const categoryRight = getCategoryRightForBlock(currentBlock);
-            console.log(`ArrowRight Key Pressed - Stimulus: ${stimulus}, Category: ${categoryRight}`);
+            console.log(ArrowRight Key Pressed - Stimulus: ${stimulus}, Category: ${categoryRight});
             recordResponse(isCorrectResponse(categoryRight, stimulus));
         }
     });
