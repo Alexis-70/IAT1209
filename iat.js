@@ -189,25 +189,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-   function showBlockInfo() {
-    iatContainer.classList.add('hidden');
-    
-    // Ottieni le categorie per sinistra e destra
-    const leftCategory = getCategoryLeftForBlock(currentBlock);
-    const rightCategory = getCategoryRightForBlock(currentBlock);
-    
-    // Crea il messaggio dinamico
-    const blockMessage = `Inizia il blocco ${currentBlock}. In questo blocco bisognerà premere a sinistra per assegnare le parole alla categoria "${leftCategory}", e premere a destra per la categoria "${rightCategory}". Ricordi di premere i pulsanti il più velocemente possibile. Prema il pulsante "Inizia" per continuare.`;
-
-    // Mostra il messaggio all'utente (puoi usare un alert, o personalizzare con una modale)
-    alert(blockMessage);
-    
-    iatContainer.classList.remove('hidden');
-    generateStimuliForBlock(currentBlock);
-    currentStimulusIndex = 0;
-    showNextStimulus();
-}
-
+    function showBlockInfo() {
+        iatContainer.classList.add('hidden');
+        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
+        alert(blockMessage);
+        iatContainer.classList.remove('hidden');
+        generateStimuliForBlock(currentBlock);
+        currentStimulusIndex = 0;
+        showNextStimulus();
+    }
 
     function endTest() {
         iatContainer.classList.add('hidden');
@@ -217,17 +207,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const avgRT_NonIo_Vergogna = average(reactionTimes['NonIo_Vergogna']);
         const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
+         // Calcolo delle medie compatibili e incompatibili
+    const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
+    const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
-        const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
-const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
+    // Calcolo del punteggio D
+    const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
 
-const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-            // Calcolo del tasso di errore
-
-reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)};
-
-
+        reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
 
         // Codice per inviare i dati al Google Form
         const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse'; // Inserisci qui l'URL del tuo Google Form
