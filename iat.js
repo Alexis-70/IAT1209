@@ -189,15 +189,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function showBlockInfo() {
-        iatContainer.classList.add('hidden');
-        const blockMessage = `Inizia il blocco ${currentBlock}. Premi il pulsante "Inizia" per continuare.`;
-        alert(blockMessage);
-        iatContainer.classList.remove('hidden');
-        generateStimuliForBlock(currentBlock);
-        currentStimulusIndex = 0;
-        showNextStimulus();
-    }
+   function showBlockInfo() {
+    iatContainer.classList.add('hidden');
+    
+    // Ottieni le categorie per sinistra e destra
+    const leftCategory = getCategoryLeftForBlock(currentBlock);
+    const rightCategory = getCategoryRightForBlock(currentBlock);
+    
+    // Crea il messaggio dinamico
+    const blockMessage = `Inizia il blocco ${currentBlock}. In questo blocco bisognerà premere a sinistra per assegnare le parole alla categoria "${leftCategory}", e premere a destra per la categoria "${rightCategory}". Ricordi di premere i pulsanti il più velocemente possibile. Prema il pulsante "Inizia" per continuare.`;
+
+    // Mostra il messaggio all'utente (puoi usare un alert, o personalizzare con una modale)
+    alert(blockMessage);
+    
+    iatContainer.classList.remove('hidden');
+    generateStimuliForBlock(currentBlock);
+    currentStimulusIndex = 0;
+    showNextStimulus();
+}
+
 
     function endTest() {
         iatContainer.classList.add('hidden');
@@ -209,7 +219,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
 
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
-        const D = ((avgRT_Io_Vergogna - avgRT_Io_Ansia) - (avgRT_NonIo_Vergogna - avgRT_NonIo_Ansia)) / sd;
+        const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
+const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
+
+const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
+
+
 
         reactionTimesDisplay.innerText = `Tempo medio di reazione per "Io e Vergogna": ${avgRT_Io_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Vergogna": ${avgRT_NonIo_Vergogna.toFixed(2)} ms\nTempo medio di reazione per "Io e Ansia": ${avgRT_Io_Ansia.toFixed(2)} ms\nTempo medio di reazione per "Non Io e Ansia": ${avgRT_NonIo_Ansia.toFixed(2)} ms\nPunteggio D: ${D.toFixed(2)}`;
 
