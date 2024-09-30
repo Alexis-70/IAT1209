@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMessage.classList.add('hidden');
             endTime = new Date().getTime();
             const reactionTime = endTime - startTime;
-
+ console.log("Reaction Time: " + reactionTime); // Log per debug
             switch (currentBlock) {
                 case 1:
                     reactionTimes['Io_Vergogna'].push(reactionTime);
