@@ -158,11 +158,11 @@ function recordResponse(isCorrect) {
                 console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
             }
         } else if (currentBlock === 1) {
-            reactionTimes['Io_Vergogna'].push(reactionTime);
-            console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
+            // Non registrare il tempo per il blocco 1
         } else if (currentBlock === 4) {
-            reactionTimes['NonIo_Ansia'].push(reactionTime);
-            console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+            // Non registrare il tempo per il blocco 4
+        } else if (currentBlock === 2) {
+            // Non registrare il tempo per il blocco 2
         }
 
         // Nascondi il messaggio di errore e mostra il prossimo stimolo
