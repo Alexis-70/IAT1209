@@ -159,12 +159,14 @@ function recordResponse(isCorrect) {
             reactionTimes['NonIo_Ansia'].push(reactionTime);
         }
 
+        // Nascondi il messaggio di errore e mostra il prossimo stimolo
+        errorMessage.classList.add('hidden');
         showNextStimulus();
     } else {
+        // Mostra un messaggio di errore senza modificare il timer
         errorMessage.classList.remove('hidden');
     }
 }
-
 
     function nextBlock() {
         currentBlock++;
