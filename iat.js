@@ -62,19 +62,53 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-case 3:
-case 5:
-    stimulusList = [
-        ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-        ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-        ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-        ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-    ];
-    break;
+        case 3:
+        case 5:
+            // Inizializza un array per i primi 20 stimoli (5 per ciascuna categoria)
+            const stimuliCount = 5; // Numero di stimoli per categoria
+            if (block === 3) {
+                stimulusList = [
+                    ...Array(stimuliCount).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+            } else if (block === 5) {
+                stimulusList = [
+                    ...Array(stimuliCount).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+                    ...Array(stimuliCount).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+                ];
+            }
 
-        }
-        shuffleArray(stimulusList);
+            // Shuffle i primi 20 stimoli
+            shuffleArray(stimulusList);
+
+            // Aggiungi stimoli dal 21° in poi in modo equo
+            for (let i = 0; i < 20; i++) {
+                if (i >= 20) {
+                    const category = i % 4; // Alterna tra 0, 1, 2, 3 per le categorie
+                    switch (category) {
+                        case 0:
+                            stimulusList.push(stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]);
+                            break;
+                        case 1:
+                            stimulusList.push(stimuliShame[Math.floor(Math.random() * stimuliShame.length)]);
+                            break;
+                        case 2:
+                            stimulusList.push(stimuliOther[Math.floor(Math.random() * stimuliOther.length)]);
+                            break;
+                        case 3:
+                            stimulusList.push(stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)]);
+                            break;
+                    }
+                }
+            }
+            break;
     }
+    shuffleArray(stimulusList);
+}
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
