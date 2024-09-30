@@ -62,28 +62,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-            case 3:
-                // Blocco 3: 20 stimoli di familiarizzazione + 20 stimoli per il test
-                stimulusList = [
-                    ...familiarizationSelf,
-                    ...familiarizationOther,
-                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
-                break;
-            case 5:
-                // Blocco 5: 20 stimoli di familiarizzazione + 20 stimoli per il test
-                stimulusList = [
-                    ...familiarizationOther,
-                    ...familiarizationShame,
-                    ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-                    ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-                    ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-                    ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-                ];
-                break;
+case 3:
+case 5:
+    stimulusList = [
+        ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+        ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+        ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+        ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+    ];
+    break;
+
         }
         shuffleArray(stimulusList);
     }
@@ -153,32 +141,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function recordResponse(isCorrect) {
-        if (isCorrect) {
-            errorMessage.classList.add('hidden');
-            endTime = new Date().getTime();
-            const reactionTime = endTime - startTime;
- console.log("Reaction Time: " + reactionTime); // Log per debug
-            switch (currentBlock) {
-                case 1:
-                    reactionTimes['Io_Vergogna'].push(reactionTime);
-                    break;
-                case 2:
-                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                    break;
-                case 3:
-                    reactionTimes['Io_Ansia'].push(reactionTime);
-                    break;
-                case 4:
-                    reactionTimes['NonIo_Ansia'].push(reactionTime);
-                    break;
-            }
+function recordResponse(isCorrect) {
+    if (isCorrect) {
+        endTime = new Date().getTime();
+        const reactionTime = endTime - startTime;
 
-            showNextStimulus();
-        } else {
-            errorMessage.classList.remove('hidden');
+        // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
+        if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
+            if (currentBlock === 3) {
+                reactionTimes['Io_Ansia'].push(reactionTime);
+            } else if (currentBlock === 5) {
+                reactionTimes['NonIo_Vergogna'].push(reactionTime);
+            }
+        } else if (currentBlock === 1) {
+            reactionTimes['Io_Vergogna'].push(reactionTime);
+        } else if (currentBlock === 4) {
+            reactionTimes['NonIo_Ansia'].push(reactionTime);
         }
+
+        showNextStimulus();
+    } else {
+        errorMessage.classList.remove('hidden');
     }
+}
+
 
     function nextBlock() {
         currentBlock++;
