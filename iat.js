@@ -151,11 +151,21 @@ function recordResponse(isCorrect) {
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
             if (currentBlock === 3) {
-                reactionTimes['Io_Ansia'].push(reactionTime);
-                console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);  // Log dei tempi per questo blocco
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                    reactionTimes['Io_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);  // Log dei tempi per questo blocco
+                } else {
+                    reactionTimes['NonIo_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+                }
             } else if (currentBlock === 5) {
-                reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                } else {
+                    reactionTimes['Io_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
+                }
             }
         } else if (currentBlock === 1) {
             // Non registrare il tempo per il blocco 1
@@ -173,6 +183,7 @@ function recordResponse(isCorrect) {
         errorMessage.classList.remove('hidden');
     }
 }
+
 
     function nextBlock() {
         currentBlock++;
