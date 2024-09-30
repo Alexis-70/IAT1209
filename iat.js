@@ -146,17 +146,23 @@ function recordResponse(isCorrect) {
         endTime = new Date().getTime();
         const reactionTime = endTime - startTime;
 
+        console.log('Tempo di reazione:', reactionTime);  // Log per vedere il tempo di reazione registrato
+
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
             if (currentBlock === 3) {
                 reactionTimes['Io_Ansia'].push(reactionTime);
+                console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);  // Log dei tempi per questo blocco
             } else if (currentBlock === 5) {
                 reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
             }
         } else if (currentBlock === 1) {
             reactionTimes['Io_Vergogna'].push(reactionTime);
+            console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
         } else if (currentBlock === 4) {
             reactionTimes['NonIo_Ansia'].push(reactionTime);
+            console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
         }
 
         // Nascondi il messaggio di errore e mostra il prossimo stimolo
