@@ -151,7 +151,11 @@ function recordResponse(isCorrect) {
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
             if (currentBlock === 3) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Vergogna' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || 
+                    stimuliSelf.includes(stimulusList[currentStimulusIndex - 1])) { // Modifica qui
                     reactionTimes['Io_Vergogna'].push(reactionTime);
                     console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);  // Log dei tempi per questo blocco
                 } else {
@@ -159,7 +163,11 @@ function recordResponse(isCorrect) {
                     console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
                 }
             } else if (currentBlock === 5) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Vergogna' || 
+                    stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || 
+                    stimuliOther.includes(stimulusList[currentStimulusIndex - 1])) { // Modifica qui
                     reactionTimes['NonIo_Vergogna'].push(reactionTime);
                     console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
                 } else {
@@ -183,7 +191,6 @@ function recordResponse(isCorrect) {
         errorMessage.classList.remove('hidden');
     }
 }
-
 
     function nextBlock() {
         currentBlock++;
