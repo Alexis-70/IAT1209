@@ -41,32 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-function generateStimuliForBlock(block) {
-    stimulusList = [];
-    blockStimuliCount = 0;
-    lastStimulus = null; // Reset lastStimulus for the new block
+    function generateStimuliForBlock(block) {
+        stimulusList = [];
+        blockStimuliCount = 0;
+        lastStimulus = null; // Reset lastStimulus for the new block
 
-    if (block === 3 || block === 5) {
-        // Genera i primi 20 stimoli: 5 per ogni categoria
-        const first20Stimuli = [
-            ...Array(5).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-            ...Array(5).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-            ...Array(5).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-            ...Array(5).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-        ];
-
-        // Genera i successivi 40 stimoli: 10 per ogni categoria
-        const next40Stimuli = [
-            ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-            ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-            ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-            ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-        ];
-
-        // Unisci i due array
-        stimulusList = [...first20Stimuli, ...next40Stimuli];
-    } else {
-        // Gestione degli altri blocchi
         switch (block) {
             case 1:
             case 4:
@@ -83,12 +62,19 @@ function generateStimuliForBlock(block) {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-        }
-    }
+case 3:
+case 5:
+    stimulusList = [
+        ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+        ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+        ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+        ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+    ];
+    break;
 
-    // Mescola l'array degli stimoli
-    shuffleArray(stimulusList);
-}
+        }
+        shuffleArray(stimulusList);
+    }
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -164,51 +150,37 @@ function recordResponse(isCorrect) {
 
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
-            const currentStimulus = stimulusList[currentStimulusIndex - 1];
-
             if (currentBlock === 3) {
-                // Gestione del blocco 3 (Io e Vergogna / Non Io e Ansia)
-                if (stimuliSelf.includes(currentStimulus)) {
-                    // Stimolo di "Io"
-                    if (stimuliShame.includes(currentStimulus)) {
-                        reactionTimes['Io_Vergogna'].push(reactionTime);
-                        console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
-                    } else if (stimuliAnxiety.includes(currentStimulus)) {
-                        reactionTimes['Io_Ansia'].push(reactionTime);
-                        console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
-                    }
-                } else if (stimuliOther.includes(currentStimulus)) {
-                    // Stimolo di "Non Io"
-                    if (stimuliShame.includes(currentStimulus)) {
-                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                        console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
-                    } else if (stimuliAnxiety.includes(currentStimulus)) {
-                        reactionTimes['NonIo_Ansia'].push(reactionTime);
-                        console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
-                    }
+                if (stimuliSelf.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['Io_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
+                } else if (stimuliOther.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['NonIo_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+                } else if (stimuliShame.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['Io_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
+                } else if (stimuliAnxiety.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['NonIo_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
                 }
             } else if (currentBlock === 5) {
-                // Gestione del blocco 5 (Non Io e Vergogna / Io e Ansia)
-                if (stimuliOther.includes(currentStimulus)) {
-                    // Stimolo di "Non Io"
-                    if (stimuliShame.includes(currentStimulus)) {
-                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                        console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
-                    } else if (stimuliAnxiety.includes(currentStimulus)) {
-                        reactionTimes['NonIo_Ansia'].push(reactionTime);
-                        console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
-                    }
-                } else if (stimuliSelf.includes(currentStimulus)) {
-                    // Stimolo di "Io"
-                    if (stimuliShame.includes(currentStimulus)) {
-                        reactionTimes['Io_Vergogna'].push(reactionTime);
-                        console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
-                    } else if (stimuliAnxiety.includes(currentStimulus)) {
-                        reactionTimes['Io_Ansia'].push(reactionTime);
-                        console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
-                    }
+                if (stimuliSelf.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['Io_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
+                } else if (stimuliOther.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                } else if (stimuliShame.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                    console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                } else if (stimuliAnxiety.includes(stimulusList[currentStimulusIndex - 1])) {
+                    reactionTimes['Io_Ansia'].push(reactionTime);
+                    console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
                 }
             }
+        } else if (currentBlock === 1 || currentBlock === 4 || currentBlock === 2) {
+            // Non registrare il tempo per i blocchi 1, 2, e 4
         }
 
         // Nascondi il messaggio di errore e mostra il prossimo stimolo
@@ -219,6 +191,8 @@ function recordResponse(isCorrect) {
         errorMessage.classList.remove('hidden');
     }
 }
+
+
 
     function nextBlock() {
         currentBlock++;
