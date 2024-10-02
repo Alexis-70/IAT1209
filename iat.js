@@ -41,11 +41,32 @@ document.addEventListener('DOMContentLoaded', function () {
         showNextStimulus();
     }
 
-    function generateStimuliForBlock(block) {
-        stimulusList = [];
-        blockStimuliCount = 0;
-        lastStimulus = null; // Reset lastStimulus for the new block
+function generateStimuliForBlock(block) {
+    stimulusList = [];
+    blockStimuliCount = 0;
+    lastStimulus = null; // Reset lastStimulus for the new block
 
+    if (block === 3 || block === 5) {
+        // Genera i primi 20 stimoli: 5 per ogni categoria
+        const first20Stimuli = [
+            ...Array(5).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+            ...Array(5).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+            ...Array(5).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+            ...Array(5).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+        ];
+
+        // Genera i successivi 40 stimoli: 10 per ogni categoria
+        const next40Stimuli = [
+            ...Array(10).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
+            ...Array(10).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
+            ...Array(10).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
+            ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
+        ];
+
+        // Unisci i due array
+        stimulusList = [...first20Stimuli, ...next40Stimuli];
+    } else {
+        // Gestione degli altri blocchi
         switch (block) {
             case 1:
             case 4:
@@ -62,19 +83,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     ...Array(10).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
                 ];
                 break;
-case 3:
-case 5:
-    stimulusList = [
-        ...Array(15).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)]),
-        ...Array(15).fill().map(() => stimuliOther[Math.floor(Math.random() * stimuliOther.length)]),
-        ...Array(15).fill().map(() => stimuliShame[Math.floor(Math.random() * stimuliShame.length)]),
-        ...Array(15).fill().map(() => stimuliAnxiety[Math.floor(Math.random() * stimuliAnxiety.length)])
-    ];
-    break;
-
         }
-        shuffleArray(stimulusList);
     }
+
+    // Mescola l'array degli stimoli
+    shuffleArray(stimulusList);
+}
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
