@@ -164,29 +164,51 @@ function recordResponse(isCorrect) {
 
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
+            const currentStimulus = stimulusList[currentStimulusIndex - 1];
+
             if (currentBlock === 3) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
-                    reactionTimes['Io_Vergogna'].push(reactionTime);
-                    console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);  // Log dei tempi per questo blocco
-                } else {
-                    reactionTimes['NonIo_Ansia'].push(reactionTime);
-                    console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+                // Gestione del blocco 3 (Io e Vergogna / Non Io e Ansia)
+                if (stimuliSelf.includes(currentStimulus)) {
+                    // Stimolo di "Io"
+                    if (stimuliShame.includes(currentStimulus)) {
+                        reactionTimes['Io_Vergogna'].push(reactionTime);
+                        console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
+                    } else if (stimuliAnxiety.includes(currentStimulus)) {
+                        reactionTimes['Io_Ansia'].push(reactionTime);
+                        console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
+                    }
+                } else if (stimuliOther.includes(currentStimulus)) {
+                    // Stimolo di "Non Io"
+                    if (stimuliShame.includes(currentStimulus)) {
+                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                        console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                    } else if (stimuliAnxiety.includes(currentStimulus)) {
+                        reactionTimes['NonIo_Ansia'].push(reactionTime);
+                        console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+                    }
                 }
             } else if (currentBlock === 5) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
-                    reactionTimes['NonIo_Vergogna'].push(reactionTime);
-                    console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
-                } else {
-                    reactionTimes['Io_Ansia'].push(reactionTime);
-                    console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
+                // Gestione del blocco 5 (Non Io e Vergogna / Io e Ansia)
+                if (stimuliOther.includes(currentStimulus)) {
+                    // Stimolo di "Non Io"
+                    if (stimuliShame.includes(currentStimulus)) {
+                        reactionTimes['NonIo_Vergogna'].push(reactionTime);
+                        console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
+                    } else if (stimuliAnxiety.includes(currentStimulus)) {
+                        reactionTimes['NonIo_Ansia'].push(reactionTime);
+                        console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
+                    }
+                } else if (stimuliSelf.includes(currentStimulus)) {
+                    // Stimolo di "Io"
+                    if (stimuliShame.includes(currentStimulus)) {
+                        reactionTimes['Io_Vergogna'].push(reactionTime);
+                        console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);
+                    } else if (stimuliAnxiety.includes(currentStimulus)) {
+                        reactionTimes['Io_Ansia'].push(reactionTime);
+                        console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
+                    }
                 }
             }
-        } else if (currentBlock === 1) {
-            // Non registrare il tempo per il blocco 1
-        } else if (currentBlock === 4) {
-            // Non registrare il tempo per il blocco 4
-        } else if (currentBlock === 2) {
-            // Non registrare il tempo per il blocco 2
         }
 
         // Nascondi il messaggio di errore e mostra il prossimo stimolo
@@ -197,7 +219,6 @@ function recordResponse(isCorrect) {
         errorMessage.classList.remove('hidden');
     }
 }
-
 
     function nextBlock() {
         currentBlock++;
