@@ -151,25 +151,17 @@ function recordResponse(isCorrect) {
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
             if (currentBlock === 3) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || stimulusList[currentStimulusIndex - 1]  === 'Io' || stimulusList[currentStimulusIndex - 1] === 'Me' || stimulusList[currentStimulusIndex - 1] === 'Miei' || stimulusList[currentStimulusIndex - 1] === 'Mie' || stimulusList[currentStimulusIndex - 1] === 'Mio' || stimulusList[currentStimulusIndex - 1] === 'Me stesso') {
                     reactionTimes['Io_Vergogna'].push(reactionTime);
                     console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);  // Log dei tempi per questo blocco
-                    if (stimulusList[currentStimulusIndex - 1] === 'Io' || stimulusList[currentStimulusIndex - 1] === 'Me' || stimulusList[currentStimulusIndex - 1] === 'Miei' || stimulusList[currentStimulusIndex - 1] === 'Mie' || stimulusList[currentStimulusIndex - 1] === 'Mio' || stimulusList[currentStimulusIndex - 1] === 'Me stesso') {
-    reactionTimes['Io_Vergogna'].push(reactionTime);
-    console.log('Tempi di reazione Io_Vergogna:', reactionTimes['Io_Vergogna']);  // Log dei tempi per questo blocco
-}
                 } else {
                     reactionTimes['NonIo_Ansia'].push(reactionTime);
                     console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
                 }
             } else if (currentBlock === 5) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a') {
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || stimulusList[currentStimulusIndex - 1] === 'Vergogna' || stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || stimulusList[currentStimulusIndex - 1] === 'Loro' || stimulusList[currentStimulusIndex - 1] === 'Lui' || stimulusList[currentStimulusIndex - 1] === 'Lei' || stimulusList[currentStimulusIndex - 1] === 'Suo' || stimulusList[currentStimulusIndex - 1] === 'Suoi' || stimulusList[currentStimulusIndex - 1] === 'Essi')  {
                     reactionTimes['NonIo_Vergogna'].push(reactionTime);
                     console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);
-                    if (stimulusList[currentStimulusIndex - 1] === 'Loro' || stimulusList[currentStimulusIndex - 1] === 'Lui' || stimulusList[currentStimulusIndex - 1] === 'Lei' || stimulusList[currentStimulusIndex - 1] === 'Suo' || stimulusList[currentStimulusIndex - 1] === 'Suoi' || stimulusList[currentStimulusIndex - 1] === 'Essi') {
-    reactionTimes['NonIo_Vergogna'].push(reactionTime);
-    console.log('Tempi di reazione NonIo_Vergogna:', reactionTimes['NonIo_Vergogna']);  // Log dei tempi per questo blocco
-}
                 } else {
                     reactionTimes['Io_Ansia'].push(reactionTime);
                     console.log('Tempi di reazione Io_Ansia:', reactionTimes['Io_Ansia']);
