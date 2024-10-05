@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
+        // Mostra il messaggio di alert prima del blocco 1
+showBlockInfo();
+
     }
 
     function generateStimuliForBlock(block) {
@@ -145,6 +148,11 @@ function recordResponse(isCorrect) {
     if (isCorrect) {
         endTime = new Date().getTime();
         const reactionTime = endTime - startTime;
+         // Escludi i tempi di reazione fuori dal range 300-3000 ms
+        if (reactionTime < 300 || reactionTime > 3000) {
+            showNextStimulus();
+            return; // Salta questo tempo di reazione
+        }
 
         console.log('Tempo di reazione:', reactionTime);  // Log per vedere il tempo di reazione registrato
 
@@ -230,6 +238,11 @@ function recordResponse(isCorrect) {
         const avgRT_Io_Ansia = average(reactionTimes['Io_Ansia']);
         const avgRT_NonIo_Ansia = average(reactionTimes['NonIo_Ansia']);
 
+        if (countIoVergogna < 10 || countNonIoVergogna < 10 || countIoAnsia < 10 || countNonIoAnsia < 10) {
+        reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile (meno di 10 tempi di reazione validi).`;
+        sendToGoogleForm('N.D.');
+        return;
+    }
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
@@ -237,6 +250,11 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
     const incorrectResponses = totalResponses - (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length); // Aggiorna in base a come registri le risposte corrette
     const errorRate = incorrectResponses / totalResponses;
+        if (errorRate > 0.2) {
+    reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile (tasso di errore superiore al 20%).`;
+    sendToGoogleForm('N.D.');
+    return;
+}
 
     // Condizioni per considerare il punteggio D come non interpretabile
     const isAvgRTInvalid = (
