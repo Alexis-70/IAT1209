@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
     let lastStimulus = null; // Track the last stimulus shown
-    let totalErrors = 0; // Inizializza il conteggio degli errori
 
 
     const categoryLeftDiv = document.getElementById('category-left');
