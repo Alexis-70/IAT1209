@@ -257,6 +257,10 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
         return;
     }
+        if (countIoVergogna < 10 || countNonIoVergogna < 10 || countIoAnsia < 10 || countNonIoAnsia < 10) {
+        reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile (meno di 10 tempi di reazione validi).`;
+        return;
+    }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
 
