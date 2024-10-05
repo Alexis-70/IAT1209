@@ -220,6 +220,7 @@ function recordResponse(isCorrect) {
     showNextStimulus();
 }
 
+
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
