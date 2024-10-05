@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
         iatContainer.classList.remove('hidden');
         generateStimuliForBlock(currentBlock);
         showNextStimulus();
+        // Mostra il messaggio di alert prima del blocco 1
+showBlockInfo();
     }
 
     function generateStimuliForBlock(block) {
@@ -145,6 +147,11 @@ function recordResponse(isCorrect) {
     if (isCorrect) {
         endTime = new Date().getTime();
         const reactionTime = endTime - startTime;
+           // Escludi i tempi di reazione fuori dal range 300-3000 ms
+        if (reactionTime < 300 || reactionTime > 3000) {
+            showNextStimulus();
+            return; // Salta questo tempo di reazione
+        }
 
         console.log('Tempo di reazione:', reactionTime);  // Log per vedere il tempo di reazione registrato
 
