@@ -240,10 +240,18 @@ function recordResponse(isCorrect) {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
-// Calcola il tasso di errore
+    // Calcola il tasso di errore
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
-    const incorrectResponses = totalResponses - (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length); // Aggiorna in base a come registri le risposte corrette
+    const incorrectResponses = (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length) - (totalResponses - (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length)); // Calcola il numero di risposte sbagliate
     const errorRate = incorrectResponses / totalResponses;
+
+    // Controlla se una delle medie è calcolata su meno di 10 elementi
+    const isAvgRTTooLow = (
+        reactionTimes['Io_Vergogna'].length < 10 ||
+        reactionTimes['NonIo_Vergogna'].length < 10 ||
+        reactionTimes['Io_Ansia'].length < 10 ||
+        reactionTimes['NonIo_Ansia'].length < 10
+    );
 
     // Condizioni per considerare il punteggio D come non interpretabile
     const isAvgRTInvalid = (
@@ -253,7 +261,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000
     );
 
-    if (isAvgRTInvalid || errorRate > 0.2) { // Se ci sono tempi di reazione non validi o un tasso di errore maggiore del 20%
+    if (isAvgRTInvalid || errorRate > 0.2 || isAvgRTTooLow) { // Se ci sono tempi di reazione non validi, un tasso di errore maggiore del 20% o una media su meno di 10 elementi
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
         return;
     }
