@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
     let lastStimulus = null; // Track the last stimulus shown
 
-
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
     const stimulusDiv = document.getElementById('stimulus');
@@ -253,10 +252,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         avgRT_Io_Ansia < 300 || avgRT_Io_Ansia > 3000 ||
         avgRT_NonIo_Ansia < 300 || avgRT_NonIo_Ansia > 3000
     );
-const hasFewResponses = (reactionTimes['Io_Vergogna'].length < 10 || 
-                         reactionTimes['NonIo_Vergogna'].length < 10 || 
-                         reactionTimes['Io_Ansia'].length < 10 || 
-                         reactionTimes['NonIo_Ansia'].length < 10);
+
     if (isAvgRTInvalid || errorRate > 0.2) { // Se ci sono tempi di reazione non validi o un tasso di errore maggiore del 20%
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
         return;
