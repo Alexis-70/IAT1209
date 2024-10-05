@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let stimulusList = [];
     let blockStimuliCount = 0; // Track the number of stimuli shown in the current block
     let lastStimulus = null; // Track the last stimulus shown
+    let errorCount = 0; // Variabile per contare gli errori
 
     const categoryLeftDiv = document.getElementById('category-left');
     const categoryRightDiv = document.getElementById('category-right');
@@ -194,6 +195,8 @@ function recordResponse(isCorrect) {
         errorMessage.classList.add('hidden');
         showNextStimulus();
     } else {
+                // Incrementa il contatore degli errori
+        errorCount++; 
         // Mostra un messaggio di errore senza modificare il timer
         errorMessage.classList.remove('hidden');
     }
@@ -240,13 +243,6 @@ function recordResponse(isCorrect) {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
-    // Calcola il numero totale di risposte e il numero di risposte errate
-    const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
-    const correctResponses = (reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length);
-    const incorrectResponses = totalResponses - correctResponses;
-
-    // Calcola il tasso di errore
-    const errorRate = totalResponses > 0 ? incorrectResponses / totalResponses : 0;
 
     // Condizioni per considerare il punteggio D come non interpretabile
     const isAvgRTInvalid = (
@@ -263,11 +259,10 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         reactionTimes['NonIo_Ansia'].length >= 10
     );
 
-    // Se ci sono tempi di reazione non validi, un tasso di errore maggiore del 20%, o meno di 10 elementi in una delle medie
-    if (isAvgRTInvalid || errorRate > 0.2 || !hasValidResponseCount) {
+       // Verifica se il numero di errori supera 36
+    if (errorCount > 36 || isAvgRTInvalid || !hasValidResponseCount) {
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
         return;
-    }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
 
