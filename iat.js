@@ -263,7 +263,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
     // Verifica se il numero di errori supera 36
     if (errorCount > 36 || isAvgRTInvalid || !hasValidResponseCount) {
-        reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile.`;
+        reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile. Si prega di riaggiornare la pagina e ricominciare il test.`;
         return;
     }
 
