@@ -220,17 +220,6 @@ function recordResponse(isCorrect) {
     showNextStimulus();
 }
 
-// Funzione per filtrare i tempi validi (tra 300 ms e 3000 ms)
-function filterValidReactionTimes(times) {
-    return times.filter(rt => rt >= 300 && rt <= 3000);
-}
-
-// Applicazione del filtro ai tempi di reazione
-const validIoVergognaTimes = filterValidReactionTimes(reactionTimes['Io_Vergogna']);
-const validNonIoVergognaTimes = filterValidReactionTimes(reactionTimes['NonIo_Vergogna']);
-const validIoAnsiaTimes = filterValidReactionTimes(reactionTimes['Io_Ansia']);
-const validNonIoAnsiaTimes = filterValidReactionTimes(reactionTimes['NonIo_Ansia']);
-
     function endTest() {
         iatContainer.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
