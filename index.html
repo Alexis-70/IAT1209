@@ -86,12 +86,12 @@
     <h1>IAT Test</h1>
 
     <!-- Modulo per nome e cognome -->
-<div id="identification" class="hidden">
-    <h2>Inserisci il codice identificativo</h2>
-    <p>Inserisci lo stesso codice identificativo inserito in precedenza: prima lettera del proprio nome; prima lettera del proprio cognome; numero di lettere del proprio cognome; ultime due cifre dell'anno di nascita (es. nome = Mario; cognome= Rossi; numero lettere = 5; anno di nascita = 2001; Codice identificativo =  MR501)</p>
-    <input type="text" id="idCode" placeholder="Codice identificativo" required>
-    <button onclick="submitIdCode()">Invia</button>
-</div>
+    <div id="user-info">
+        <h2>Inserisci i tuoi dati</h2>
+        <input type="text" id="user-name" placeholder="Nome" required>
+        <input type="text" id="user-surname" placeholder="Cognome" required>
+        <button id="submit-user-info">Invia</button>
+    </div>
 
     <div id="instructions" class="hidden">
         <p><p>Nel prossimo compito le verranno presentati un insieme di parole da classificare in gruppi. Questo compito richiede l’abilità di classificare il più velocemente possibile e facendo meno errori possibile. Andare troppo lenti o fare troppi errori porterebbe ad un risultato non interpretabile. Questa parte dello studio richiede 5 minuti. Di seguito presentiamo una lista degli elementi e delle categorie a cui appartengono.</p>
