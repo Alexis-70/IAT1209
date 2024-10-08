@@ -272,7 +272,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
     const r_NonIo_Vergogna = correlation(half1_NonIo_Vergogna, half2_NonIo_Vergogna);
     const r_Io_Ansia = correlation(half1_Io_Ansia, half2_Io_Ansia);
     const r_NonIo_Ansia = correlation(half1_NonIo_Ansia, half2_NonIo_Ansia);
-        
+        const avg_r = (r_Io_Vergogna + r_NonIo_Vergogna + r_Io_Ansia + r_NonIo_Ansia) / 4;
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
 
@@ -296,7 +296,6 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile. Si prega di riaggiornare la pagina e ricominciare il test.`;
         return;
     }
-const avg_r = (r_Io_Vergogna + r_NonIo_Vergogna + r_Io_Ansia + r_NonIo_Ansia);
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
 
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
