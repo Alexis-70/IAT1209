@@ -245,7 +245,12 @@ function recordResponse(isCorrect) {
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
             // Calcola l'affidabilità del test usando l'alpha di Cronbach
-    const reliabilityScore = 0,65;
+const reliabilityScore = cronbachAlpha([
+        reactionTimes['Io_Vergogna'],
+        reactionTimes['NonIo_Vergogna'],
+        reactionTimes['Io_Ansia'],
+        reactionTimes['NonIo_Ansia']
+    ]);
 
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
@@ -272,7 +277,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
     }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-
+const reliabilityMessage = `Punteggio di affidabilità (alpha di Cronbach): ${reliabilityScore.toFixed(2)}`;
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
 
         // Codice per inviare i dati al Google Form
@@ -281,7 +286,6 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio 
-            'entry.1121911287': reliabilityScore.toFixed(2) // Aggiungi l'ID del campo per il punteggio di affidabilità
         };
 
          const formData = new URLSearchParams(data).toString();
