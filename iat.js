@@ -243,15 +243,6 @@ function recordResponse(isCorrect) {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
-
-            // Calcola l'affidabilità del test usando l'alpha di Cronbach
-const reliabilityScore = cronbachAlpha([
-        reactionTimes['Io_Vergogna'],
-        reactionTimes['NonIo_Vergogna'],
-        reactionTimes['Io_Ansia'],
-        reactionTimes['NonIo_Ansia']
-    ]);
-
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
 
@@ -277,7 +268,7 @@ const reliabilityScore = cronbachAlpha([
     }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
-const reliabilityMessage = `Punteggio di affidabilità (alpha di Cronbach): ${reliabilityScore.toFixed(2)}`;
+
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
 
         // Codice per inviare i dati al Google Form
@@ -285,7 +276,7 @@ const reliabilityMessage = `Punteggio di affidabilità (alpha di Cronbach): ${re
         const data = {
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
-            'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio 
+            'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
         };
 
          const formData = new URLSearchParams(data).toString();
@@ -314,18 +305,6 @@ const reliabilityMessage = `Punteggio di affidabilità (alpha di Cronbach): ${re
         const avg = average(arr);
         return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
     }
-    function cronbachAlpha(items) {
-    const itemVariances = items.map(item => {
-        const mean = average(item);
-        return average(item.map(value => Math.pow(value - mean, 2)));
-    });
-    
-    const totalVariance = average(items.flat().map(value => Math.pow(value - average(items.flat()), 2)));
-    const k = items.length;
-    
-    return (k / (k - 1)) * (1 - (average(itemVariances) / totalVariance));
-}
-
 
     function isCorrectResponse(category, stimulus) {
         console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
