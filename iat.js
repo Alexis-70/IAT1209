@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso'];
     const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi'];
-    const stimuliShame = ['Arrossamento', 'Imbarazzo', 'Vergogna', 'Vergognoso/a'];
+    const stimuliShame = ['Arrossire', 'Imbarazzo', 'Vergogna', 'Vergognoso/a'];
     const stimuliAnxiety = ['Ansioso/a', 'Tachicardia', 'Paura', 'Incertezza'];
 
     // Per familiarizzazione
