@@ -311,7 +311,7 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
-            'entry.1514826993': avg_r,
+            'entry.1514826993': avg_r.toFixed(2) //
         };
 
          const formData = new URLSearchParams(data).toString();
