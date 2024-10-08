@@ -85,23 +85,6 @@ case 5:
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
-    function correlation(arr1, arr2) {
-    const n = arr1.length;
-    const mean1 = arr1.reduce((a, b) => a + b, 0) / n;
-    const mean2 = arr2.reduce((a, b) => a + b, 0) / n;
-
-    const numerator = arr1.map((x, i) => (x - mean1) * (arr2[i] - mean2)).reduce((a, b) => a + b, 0);
-    const denominator1 = Math.sqrt(arr1.map(x => (x - mean1) ** 2).reduce((a, b) => a + b, 0));
-    const denominator2 = Math.sqrt(arr2.map(x => (x - mean2) ** 2).reduce((a, b) => a + b, 0));
-
-    return numerator / (denominator1 * denominator2);
-}
-
-    function splitArrayInHalf(arr) {
-    const shuffled = arr.sort(() => Math.random() - 0.5);
-    const half = Math.floor(shuffled.length / 2);
-    return [shuffled.slice(0, half), shuffled.slice(half)];
-}
 
     function showNextStimulus() {
         if (blockStimuliCount < 20 || currentStimulusIndex < stimulusList.length) { // Ensure correct number of stimuli per block
@@ -261,18 +244,14 @@ function recordResponse(isCorrect) {
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
-            // Estrai casualmente metà dei tempi di reazione per ogni array
-    const [half1_Io_Vergogna, half2_Io_Vergogna] = splitArrayInHalf(reactionTimes['Io_Vergogna']);
-    const [half1_NonIo_Vergogna, half2_NonIo_Vergogna] = splitArrayInHalf(reactionTimes['NonIo_Vergogna']);
-    const [half1_Io_Ansia, half2_Io_Ansia] = splitArrayInHalf(reactionTimes['Io_Ansia']);
-    const [half1_NonIo_Ansia, half2_NonIo_Ansia] = splitArrayInHalf(reactionTimes['NonIo_Ansia']);
+            // Calcola l'affidabilità del test usando l'alpha di Cronbach
+    const reliabilityScore = cronbachAlpha([
+        reactionTimes['Io_Vergogna'],
+        reactionTimes['NonIo_Vergogna'],
+        reactionTimes['Io_Ansia'],
+        reactionTimes['NonIo_Ansia']
+    ]);
 
-    // Calcola la correlazione lineare per ciascuna coppia
-    const r_Io_Vergogna = correlation(half1_Io_Vergogna, half2_Io_Vergogna);
-    const r_NonIo_Vergogna = correlation(half1_NonIo_Vergogna, half2_NonIo_Vergogna);
-    const r_Io_Ansia = correlation(half1_Io_Ansia, half2_Io_Ansia);
-    const r_NonIo_Ansia = correlation(half1_NonIo_Ansia, half2_NonIo_Ansia);
-        const avg_r = average(r_Io_Vergogna, r_NonIo_Vergogna, r_Io_Ansia, r_NonIo_Ansia);
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
 
@@ -296,6 +275,7 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
         reactionTimesDisplay.innerText = `Il punteggio D non è interpretabile. Si prega di riaggiornare la pagina e ricominciare il test.`;
         return;
     }
+
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
 
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
@@ -305,7 +285,8 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
         const data = {
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
-            'entry.1121911287': avg_r.toFixed(2)
+            'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio 
+            'entry.1121911287': reliabilityScore.toFixed(2) // Aggiungi l'ID del campo per il punteggio di affidabilità
         };
 
          const formData = new URLSearchParams(data).toString();
@@ -334,6 +315,18 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
         const avg = average(arr);
         return Math.sqrt(arr.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / arr.length);
     }
+    function cronbachAlpha(items) {
+    const itemVariances = items.map(item => {
+        const mean = average(item);
+        return average(item.map(value => Math.pow(value - mean, 2)));
+    });
+    
+    const totalVariance = average(items.flat().map(value => Math.pow(value - average(items.flat()), 2)));
+    const k = items.length;
+    
+    return (k / (k - 1)) * (1 - (average(itemVariances) / totalVariance));
+}
+
 
     function isCorrectResponse(category, stimulus) {
         console.log(`Checking Response - Stimulus: ${stimulus}, Category: ${category}`);
