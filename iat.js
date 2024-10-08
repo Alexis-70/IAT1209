@@ -296,6 +296,7 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
         const r_media2 = (IoVergognaHalf2 + NonIoVergognaHalf1 + IoAnsiaHalf2 + NonIoAnsiaHalf1);
     // Calcola la correlazione lineare tra le metà
     const r_IAT = pearsonCorrelation(r_media1, r_media2);
+        const formatted_r_IAT = r_IAT.toFixed(2);
 
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
 
