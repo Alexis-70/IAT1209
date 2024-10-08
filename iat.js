@@ -230,6 +230,24 @@ function recordResponse(isCorrect) {
     showNextStimulus();
 }
 
+function splitArrayInHalf(arr) {
+    const shuffled = arr.sort(() => Math.random() - 0.5);
+    const half = Math.floor(shuffled.length / 2);
+    return [shuffled.slice(0, half), shuffled.slice(half)];
+}
+function pearsonCorrelation(x, y) {
+    const n = x.length;
+    const sumX = x.reduce((a, b) => a + b, 0);
+    const sumY = y.reduce((a, b) => a + b, 0);
+    const sumXY = x.map((xi, i) => xi * y[i]).reduce((a, b) => a + b, 0);
+    const sumX2 = x.map(xi => xi * xi).reduce((a, b) => a + b, 0);
+    const sumY2 = y.map(yi => yi * yi).reduce((a, b) => a + b, 0);
+
+    const numerator = (n * sumXY) - (sumX * sumY);
+    const denominator = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
+
+    return denominator === 0 ? 0 : numerator / denominator;
+}
 
     function endTest() {
         iatContainer.classList.add('hidden');
@@ -268,6 +286,16 @@ const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
     }
 
 const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
+         // Suddividi gli array in due metà
+    const [IoVergognaHalf1, IoVergognaHalf2] = splitArrayInHalf(reactionTimes['Io_Vergogna']);
+    const [NonIoVergognaHalf1, NonIoVergognaHalf2] = splitArrayInHalf(reactionTimes['NonIo_Vergogna']);
+    const [IoAnsiaHalf1, IoAnsiaHalf2] = splitArrayInHalf(reactionTimes['Io_Ansia']);
+    const [NonIoAnsiaHalf1, NonIoAnsiaHalf2] = splitArrayInHalf(reactionTimes['NonIo_Ansia']);
+// Calcola due metà
+        const r_media1 = (IoVergognaHalf1 + NonIoVergognaHalf2 + IoAnsiaHalf1 + NonIoAnsiaHalf2);
+        const r_media2 = (IoVergognaHalf2 + NonIoVergognaHalf1 + IoAnsiaHalf2 + NonIoAnsiaHalf1);
+    // Calcola la correlazione lineare tra le metà
+    const r_IAT = pearsonCorrelation(r_media1, r_media2);
 
         reactionTimesDisplay.innerText = `Il test è terminato. La ringraziamo per aver partecipato a questa ricerca.`;
 
@@ -277,6 +305,7 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
+            'entry.1514826993': r_IAT,
         };
 
          const formData = new URLSearchParams(data).toString();
