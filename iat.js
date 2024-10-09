@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const stimuliSelf = ['Io', 'Me', 'Miei', 'Mie', 'Mio', 'Me stesso'];
     const stimuliOther = ['Loro', 'Lui', 'Lei', 'Suo', 'Suoi', 'Essi'];
-    const stimuliShame = ['Arrossamento', 'Imbarazzo', 'Vergogna', 'Vergognoso/a'];
-    const stimuliAnxiety = ['Ansioso/a', 'Tachicardia', 'Paura', 'Incertezza'];
+    const stimuliShame = ['Arrossire', 'Imbarazzo', 'Vergogna', 'Vergognoso/a'];
+    const stimuliAnxiety = ['Ansioso/a', 'Tachicardia', 'Tremore', 'Ansia'];
 
     // Per familiarizzazione
     const familiarizationSelf = [...Array(20).fill().map(() => stimuliSelf[Math.floor(Math.random() * stimuliSelf.length)])];
@@ -159,7 +159,7 @@ function recordResponse(isCorrect) {
         // Conta solo i tempi di reazione dal 21° stimolo in poi (per blocchi 3 e 5)
         if ((currentBlock === 3 || currentBlock === 5) && blockStimuliCount > 20) {
             if (currentBlock === 3) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || 
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossire' || 
                     stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || 
                     stimulusList[currentStimulusIndex - 1] === 'Vergogna' || 
                     stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || 
@@ -171,7 +171,7 @@ function recordResponse(isCorrect) {
                     console.log('Tempi di reazione NonIo_Ansia:', reactionTimes['NonIo_Ansia']);
                 }
             } else if (currentBlock === 5) {
-                if (stimulusList[currentStimulusIndex - 1] === 'Arrossamento' || 
+                if (stimulusList[currentStimulusIndex - 1] === 'Arrossire' || 
                     stimulusList[currentStimulusIndex - 1] === 'Imbarazzo' || 
                     stimulusList[currentStimulusIndex - 1] === 'Vergogna' || 
                     stimulusList[currentStimulusIndex - 1] === 'Vergognoso/a' || 
