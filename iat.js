@@ -243,6 +243,15 @@ function recordResponse(isCorrect) {
         const sd = standardDeviation([...reactionTimes['Io_Vergogna'], ...reactionTimes['NonIo_Vergogna'], ...reactionTimes['Io_Ansia'], ...reactionTimes['NonIo_Ansia']]);
         const avgRT_Compatibile = (avgRT_Io_Vergogna + avgRT_NonIo_Ansia) / 2;
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
+
+            // Crea una stringa con tutti i tempi di reazione
+    const allReactionTimes = [
+        ...reactionTimes['Io_Vergogna'],
+        ...reactionTimes['NonIo_Vergogna'],
+        ...reactionTimes['Io_Ansia'],
+        ...reactionTimes['NonIo_Ansia']
+    ].join(', '); // Unisci i tempi in una stringa separata da virgole
+        
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
 
@@ -275,12 +284,8 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
         const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-1xmaYc6C0_cWOJQ14_HyUP9JJwiak5X4XhKpPnJRKCBXOw/formResponse'; // Inserisci qui l'URL del tuo Google Form
         const data = {
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
-            'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
+            'entry.222093517': allReactionTimes, // Sostituisci con l'ID del campo per il cognome
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
-            'entry.1493161979': JSON.stringify(Io_Vergogna), // Sostituisci con l'ID del campo per l'array Io_Vergogna
-  'entry.583156244': JSON.stringify(NonIo_Ansia), // Sostituisci con l'ID del campo per l'array NonIo_Ansia
-    'entry.832449228': JSON.stringify(Io_Ansia), // Sostituisci con l'ID del campo per l'array Io_Ansia
-    'entry.1051695808': JSON.stringify(NonIo_Vergogna) // Sostituisci con l'ID del campo per l'array NonIo_Vergogna
         };
 
          const formData = new URLSearchParams(data).toString();
