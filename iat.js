@@ -277,10 +277,10 @@ const D = (avgRT_Incompatibile - avgRT_Compatibile) / sd;
             'entry.695362309': userName, // Sostituisci con l'ID del campo per il nome
             'entry.222093517': userSurname, // Sostituisci con l'ID del campo per il cognome
             'entry.1683801057': D.toFixed(2) // Sostituisci con l'ID del campo per il punteggio D
-            'entry.1493161979': Io_Vergogna.join(','), // Sostituisci con l'ID del campo per l'array Io_Vergogna
-  'entry.583156244': NonIo_Ansia.join(','), // Sostituisci con l'ID del campo per l'array NonIo_Ansia
-    'entry.832449228': Io_Ansia.join(','), // Sostituisci con l'ID del campo per l'array Io_Ansia
-    'entry.1051695808': NonIo_Vergogna.join(',') // Sostituisci con l'ID del campo per l'array NonIo_Vergogna
+            'entry.1493161979': JSON.stringify(Io_Vergogna), // Sostituisci con l'ID del campo per l'array Io_Vergogna
+  'entry.583156244': JSON.stringify(NonIo_Ansia), // Sostituisci con l'ID del campo per l'array NonIo_Ansia
+    'entry.832449228': JSON.stringify(Io_Ansia), // Sostituisci con l'ID del campo per l'array Io_Ansia
+    'entry.1051695808': JSON.stringify(NonIo_Vergogna) // Sostituisci con l'ID del campo per l'array NonIo_Vergogna
         };
 
          const formData = new URLSearchParams(data).toString();
