@@ -245,12 +245,13 @@ function recordResponse(isCorrect) {
 const avgRT_Incompatibile = (avgRT_Io_Ansia + avgRT_NonIo_Vergogna) / 2;
 
             // Crea una stringa con tutti i tempi di reazione
-    const allReactionTimes = [
-        ...reactionTimes['Io_Vergogna'],
-        ...reactionTimes['NonIo_Vergogna'],
-        ...reactionTimes['Io_Ansia'],
-        ...reactionTimes['NonIo_Ansia']
-    ].join(', '); // Unisci i tempi in una stringa separata da virgole
+ const allReactionTimes = [
+    '- ' + reactionTimes['Io_Vergogna'].join(', '),
+    '- ' + reactionTimes['NonIo_Vergogna'].join(', '),
+    '- ' + reactionTimes['Io_Ansia'].join(', '),
+    '- ' + reactionTimes['NonIo_Ansia'].join(', ')
+].join(', '); // Unisci i tempi in una stringa separata da virgole
+
         
     // Calcola il numero totale di risposte e il numero di risposte errate
     const totalResponses = reactionTimes['Io_Vergogna'].length + reactionTimes['NonIo_Vergogna'].length + reactionTimes['Io_Ansia'].length + reactionTimes['NonIo_Ansia'].length;
