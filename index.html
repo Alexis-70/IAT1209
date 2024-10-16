@@ -140,16 +140,16 @@
             const startContainer = document.getElementById('start-container');
             const startButton = document.getElementById('start-button');
             const userNameInput = document.getElementById('user-name');
-            const userSurnameInput = document.getElementById('user-surname');
+            
 
             submitUserInfoButton.addEventListener('click', function () {
                 const userName = userNameInput.value.trim();
-                const userSurname = userSurnameInput.value.trim();
+                
 
                 if (userName && userSurname) {
                     // Passa i dati al JavaScript del test
                     window.userName = userName;
-                    window.userSurname = userSurname;
+                    
 
                     userInfoDiv.classList.add('hidden');
                     instructionsDiv.classList.remove('hidden');
