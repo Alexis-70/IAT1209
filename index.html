@@ -146,7 +146,7 @@
                 const userName = userNameInput.value.trim();
                 
 
-                if (userName && userSurname) {
+                if (userName) {
                     // Passa i dati al JavaScript del test
                     window.userName = userName;
                     
@@ -155,7 +155,7 @@
                     instructionsDiv.classList.remove('hidden');
                     startContainer.classList.remove('hidden');
                 } else {
-                    alert('Per favore, inserisci entrambi i dati.');
+                    alert('Per favore, inserisci il codice identificativo.');
                 }
             });
         });
