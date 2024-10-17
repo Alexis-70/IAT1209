@@ -54,7 +54,11 @@
         .error {
             color: red;
             font-size: 24px;
-            margin-top: -5px;
+             position: absolute; /* Imposta una posizione assoluta */
+    top: 10px; /* Regola questo valore per posizionare il messaggio più in alto */
+    left: 50%; 
+    transform: translateX(-50%); /* Per centrare orizzontalmente il messaggio */
+}
 
         }
         /* Stile per pulsanti touch su dispositivi mobili */
